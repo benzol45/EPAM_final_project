@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-//TODO РЕАЛИЗОВАТЬ !!! + сущность штрафы (пользователь-сумма-дата)
 @Data
 @Entity
 @Table(name = "orders")
