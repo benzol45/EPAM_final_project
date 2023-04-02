@@ -9,18 +9,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <preConditions>
-        <dbms type="postgresql"/>
-    </preConditions>
-
-    <changeSet author="author" id="0">
-        <tagDatabase tag="initial"/>
+    <changeSet author="author" id="10">
+        <sqlFile path="create_base_tables.sql" relativeToChangelogFile="true"/>
     </changeSet>
-
-    <include file="v-1.0.0/changelog-v-1.0.0.xml" relativeToChangelogFile="true"/>
-
-    <changeSet author="author" id="100">
-        <tagDatabase tag="version 1.0"/>
-    </changeSet>
-
 </databaseChangeLog>
