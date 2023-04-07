@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<configuration debug="true">
+    <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
+
+<!--https://www.codelord.net/2010/08/27/logging-with-a-context-users-in-logback-and-spring-security/ comments about adding user information to log
+    [%mdc{user} %mdc{session}]      -->
+
+<!--    https://intellij-support.jetbrains.com/hc/en-us/community/posts/10316380313874-logback-xml-effects-on-IntelIj-console-default-colors-how-I-can-fix-it-
+        save default view of console logging with colors-->
+
+    <appender name="STDOUT" class="ConsoleAppender">
+        <encoder class="PatternLayoutEncoder">
+            <pattern>%date [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+<!--    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>./logs/log.log</file>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>./logs/log-%d{yyyy-MM-dd}_%i.log</fileNamePattern>-->
+<!--            <maxFileSize>1MB</maxFileSize>-->
+<!--            <maxHistory>30</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        <encoder>-->
+<!--            <pattern>%d{HH:mm:ss.SSS} [%mdc{user} %mdc{session}] [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+<!--    <logger name="LoggerLesson" level="INFO">-->
+<!--        <appender-ref ref="ROLLING_FILE"/>-->
+<!--    </logger>-->
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
