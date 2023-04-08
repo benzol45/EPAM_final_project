@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Locale;
 
 @Data
 @Entity
@@ -18,6 +19,8 @@ public class User implements UserDetails {
 
     private String fullName;
     private String contact;
+    @Enumerated(EnumType.STRING)
+    private Language language;
 
     private String login;
     private String password;
@@ -53,6 +56,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    enum Language {
+        RU, EN
     }
 
     enum Role {
