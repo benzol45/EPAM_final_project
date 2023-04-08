@@ -12,10 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,16 +43,16 @@ public class ISBNservice {
         }
         Map body = entity.getBody();
         Book.BookBuilder bookBuilder = Book.builder();
-        bookBuilder.ISBN((String) ((ArrayList)body.get("isbn_13")).get(0));
-        bookBuilder.author(getAuthors((ArrayList)body.get("authors")));
+        bookBuilder.ISBN((String) ((List)body.get("isbn_13")).get(0));
+        bookBuilder.author(getAuthors((List)body.get("authors")));
         bookBuilder.title((String) body.get("title"));
-        bookBuilder.publisher((String) ((ArrayList)body.get("publishers")).get(0));
-        bookBuilder.dateOfPublication(getDate((String)body.get("publish_date")));   //October 1, 1988
+        bookBuilder.publisher((String) ((List)body.get("publishers")).get(0));
+        bookBuilder.dateOfPublication(getDate((String)body.get("publish_date")));
 
         return Optional.of(bookBuilder.build());
     }
 
-    private String getAuthors(ArrayList<Map<String,String>> authors) {
+    private String getAuthors(List<Map<String,String>> authors) {
         if (authors==null) {
             return "";
         }

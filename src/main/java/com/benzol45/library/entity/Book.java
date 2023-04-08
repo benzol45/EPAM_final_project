@@ -23,6 +23,7 @@ public class Book {
     private String ISBN;
     private String author;
     private String title;
+    private String imagePath;
     private String publisher;
     private LocalDate dateOfPublication;
     private int quantity;

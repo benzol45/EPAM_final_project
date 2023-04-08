@@ -3,6 +3,7 @@ CREATE TABLE book (
     isbn varchar UNIQUE,
     author varchar,
     title varchar NOT NULL,
+    image_path varchar DEFAULT '',
     publisher varchar,
     date_of_publication date,
     quantity int CHECK (quantity>0)
