@@ -23,15 +23,15 @@ class ISBNserviceIntegrationTest {
     @Test
     void fillByISBN() {
         ISBNservice isbnService = new ISBNservice(new RestTemplate());
-        Optional<Book> optionalBook = isbnService.fillByISBN("5352003523");
+        Optional<Book> optionalBook = isbnService.fillByISBN("9780544003415");
 
         assertTrue(optionalBook.isPresent());
         Book book = optionalBook.get();
-        assertEquals("9785352003527", book.getISBN());
-        assertEquals("D. Tolkin", book.getAuthor());
-        assertEquals("Vlastelin Kolets", book.getTitle());
-        assertEquals("Azbuka", book.getPublisher());
-        assertEquals(LocalDate.of(2005,4,8), book.getDateOfPublication());
+        assertEquals("9780544003415", book.getISBN());
+        assertEquals("J.R.R. Tolkien", book.getAuthor());
+        assertEquals("The lord of the rings", book.getTitle());
+        assertEquals("Houghton Mifflin", book.getPublisher());
+        assertEquals(LocalDate.of(2012,12,31), book.getDateOfPublication());
     }
 }
 
