@@ -22,9 +22,14 @@ public class BookService {
     }
 
     public List<Book> getAll() {
-        //TODO Сортировка и пагинация. Размер старницы - в пропертис и внедрять через @ConfigurationProperties
-        //https://www.baeldung.com/spring-data-jpa-pagination-sorting
-        Pageable pageable = PageRequest.of(0,10, Sort.by("title"));
+        return bookRepository.findAll();
+    }
+
+    public List<Book> getAllWithPaging(Pageable pageable) {
         return bookRepository.findAll(pageable).getContent();
+    }
+
+    public int getTotalPages(Pageable pageable) {
+        return bookRepository.findAll(pageable).getTotalPages();
     }
 }

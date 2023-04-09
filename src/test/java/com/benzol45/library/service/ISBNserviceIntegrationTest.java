@@ -30,14 +30,8 @@ class ISBNserviceIntegrationTest {
         assertEquals("9780544003415", book.getISBN());
         assertEquals("J.R.R. Tolkien", book.getAuthor());
         assertEquals("The lord of the rings", book.getTitle());
+        assertEquals(1216, book.getPages());
         assertEquals("Houghton Mifflin", book.getPublisher());
         assertEquals(LocalDate.of(2012,12,31), book.getDateOfPublication());
     }
 }
-
-//    void fillByISBN() throws IOException {
-//        ISBNservice isbNservice = new ISBNservice(new RestTemplate());
-//        List<Optional<Book>> collect = Files.lines(Path.of("./src/main/resources/isbn_base_books_list.txt").toAbsolutePath()).distinct().map(line -> isbNservice.fillByISBN(line.trim())).collect(Collectors.toList());
-//        List<Book> collect1 = collect.stream().map(o -> o.get()).map(o->{Random random = new Random(); o.setQuantity(random.nextInt(5)+1); return o;}).map(o -> bookRepository.save(o)).collect(Collectors.toList());
-//        System.out.println(collect1);
-//    }

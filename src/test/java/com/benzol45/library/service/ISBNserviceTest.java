@@ -31,6 +31,7 @@ class ISBNserviceTest {
         Map<String,Object> bookResponse = Map.of("isbn_13", List.of("1234567890128"),
                                                  "authors", List.of(Map.of("key","/authors/mock_author")),
                                                  "title", "MockTitle",
+                                                 "number_of_pages",42,
                                                  "publishers", List.of("MockPublisher"),
                                                  "publish_date","Jan 10, 2011");
         when(mockRestTemplate.getForEntity(contains("https://openlibrary.org/isbn"),any())).thenReturn(ResponseEntity.ok().body(bookResponse));
@@ -44,6 +45,7 @@ class ISBNserviceTest {
         assertEquals("1234567890128", book.getISBN());
         assertEquals("MockAuthor", book.getAuthor());
         assertEquals("MockTitle", book.getTitle());
+        assertEquals(42, book.getPages());
         assertEquals("MockPublisher", book.getPublisher());
         assertEquals(LocalDate.of(2011,1,10), book.getDateOfPublication());
     }

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book catalog</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    Sort by: <a href="/catalog?sort=title">title</a>
+             <a href="/catalog?sort=author">author</a>
+             <a href="/catalog?sort=publisher">publisher</a>
+             <a href="/catalog?sort=dateOfPublication">publication date</a>
+    <br>
+
+    Page: <span th:text="${page}"/>
+    <a th:href="@{/catalog?sort={sort}&page={page} (sort=${sort}, page=${page-1}) }" th:if="${page>0}">previous</a>
+    <a th:href="@{/catalog?sort={sort}&page={page} (sort=${sort}, page=${page+1}) }" th:if="${page<totalPages-1}">next</a>
+    <br>
+
+    <table>
+        <tr>
+           <th>Title</th>
+           <th>Author</th>
+           <th>Pages</th>
+           <th>Publisher</th>
+           <th>Date of publication</th>
+        </tr>
+        <div th:each="book: ${books}">
+            <tr>
+                <td th:text="${book.getTitle()}">title</td>
+                <td th:text="${book.getAuthor()}">author</td>
+                <td th:text="${book.getPages()}">pages</td>
+                <td th:text="${book.getPublisher()}">publisher</td>
+                <td th:text="${book.getDateOfPublication()}">publicationDate</td>
+            </tr>
+        </div>
+    </table>
+</body>
+</html>

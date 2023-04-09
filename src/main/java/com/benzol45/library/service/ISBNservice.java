@@ -15,6 +15,8 @@ import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 
+//TODO Попробовать отсюда доставать https://isbnsearch.org/isbn/9780544003415 картинки обложки
+
 @Service
 @Slf4j
 public class ISBNservice {
@@ -46,6 +48,7 @@ public class ISBNservice {
         bookBuilder.ISBN((String) ((List)body.get("isbn_13")).get(0));
         bookBuilder.author(getAuthors((List)body.get("authors")));
         bookBuilder.title((String) body.get("title"));
+        bookBuilder.pages((Integer)body.get("number_of_pages"));
         bookBuilder.publisher((String) ((List)body.get("publishers")).get(0));
         bookBuilder.dateOfPublication(getDate((String)body.get("publish_date")));
 
