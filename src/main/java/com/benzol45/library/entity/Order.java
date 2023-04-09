@@ -21,4 +21,5 @@ public class Order {
     private Book book;
 
     private LocalDateTime createDate;
+    //TODO добавить дату когда книга была выдана что бы считать сколько пришлось ждать
 }

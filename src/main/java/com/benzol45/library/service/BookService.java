@@ -32,4 +32,9 @@ public class BookService {
     public int getTotalPages(Pageable pageable) {
         return bookRepository.findAll(pageable).getTotalPages();
     }
+
+    public Book getById(Long id) {
+        //TODO Не нашли - залогируй и верни пустое
+        return bookRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Can't find book with id " + id));
+    }
 }
