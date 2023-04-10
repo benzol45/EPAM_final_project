@@ -1,6 +1,7 @@
 package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.Book;
+import com.benzol45.library.entity.validator.BookUniqValidator;
 import com.benzol45.library.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-
 @Controller
 @RequestMapping("/book")
 public class BookController {
     private final BookService bookService;
+    private final BookUniqValidator bookUniqValidator;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, BookUniqValidator bookUniqValidator) {
         this.bookService = bookService;
+        this.bookUniqValidator = bookUniqValidator;
     }
 
     @GetMapping("/new")
@@ -38,10 +39,13 @@ public class BookController {
 
     @PostMapping
     public String saveBook(@Valid Book book, Errors errors) {
-        //TODO сохранение / переписываение книги + валидация
+        //TODO проверять на уникальность только новые = нет ud if (book.getId().)
+        bookUniqValidator.validate(book, errors);
         if (errors.hasErrors()) {
             return "BookEdit";
         }
+
+        bookService.save(book);
 
         return "redirect:/";
     }

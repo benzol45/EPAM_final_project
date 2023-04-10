@@ -1,14 +1,12 @@
 package com.benzol45.library.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -25,18 +23,34 @@ public class Book {
     private Long id;
 
     //TODO Выдача сообщений с ошибками валидации на нужных языках
+    //https://stackoverflow.com/questions/4805168/customize-spring-validation-error
     @NotNull
     @NotBlank
     @Size(min = 10, max = 13, message = "ISBN can be only 10 or 13 digits")
     @Pattern(regexp = "[0-9]*", message = "ISBN can contents only digits")
     private String ISBN;
 
-    //TODO Прописать всем правила валидации
+    @NotNull
+    @NotBlank
     private String author;
+
+    @NotNull
+    @NotBlank
     private String title;
+
+    @Positive
     private int pages;
+
     private String imagePath;
+
+    @NotNull
+    @NotBlank
     private String publisher;
+
+    @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate dateOfPublication;
+
+    @Positive
     private int quantity;
 }

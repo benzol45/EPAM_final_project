@@ -17,4 +17,6 @@ public class LibraryApplication {
     public RestTemplate restTemplate() {
         return (new RestTemplateBuilder()).build();
     }
+
+    //TODO отдельная страница для загрузки/поиска картинки на обложку
 }

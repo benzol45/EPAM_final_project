@@ -37,4 +37,8 @@ public class BookService {
         //TODO Не нашли - залогируй и верни пустое
         return bookRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Can't find book with id " + id));
     }
+
+    public Book save(Book book) {
+        return bookRepository.save(book);
+    }
 }
