@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/catalog")
@@ -19,13 +20,15 @@ public class CatalogController {
     }
 
     @GetMapping
-    public String getCatalogPage(Model model, @ModelAttribute PageableParam pageableParam) {
-        model.addAttribute("books", bookService.getAllWithPaging(pageableParam.getPageable()));
+    public String getCatalogPage(Model model, @ModelAttribute PageableParam pageableParam, @RequestParam(value = "filter",required = false, defaultValue = "") String filter) {
+        model.addAttribute("books", bookService.getListWithPaging(filter,pageableParam.getPageable()));
         model.addAttribute("page", pageableParam.getPage());
-        model.addAttribute("totalPages", bookService.getTotalPages(pageableParam.getPageable()));
+        model.addAttribute("totalPages", bookService.getTotalPages(filter,pageableParam.getPageable()));
         model.addAttribute("sort", pageableParam.getSort());
+        model.addAttribute("filter", filter);
         return "BookCatalog";
         //TODO подобрать ширину столбцов в процентах от экрана
+        //TODO Номера страниц выводить +1 а то они щас отображаются начиная с 0
     }
 
 

@@ -39,7 +39,6 @@ public class BookController {
 
     @PostMapping
     public String saveBook(@Valid Book book, Errors errors) {
-        //TODO проверять на уникальность только новые = нет ud if (book.getId().)
         bookUniqValidator.validate(book, errors);
         if (errors.hasErrors()) {
             return "BookEdit";

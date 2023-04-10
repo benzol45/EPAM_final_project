@@ -12,15 +12,21 @@
     </style>
 </head>
 <body>
-    Sort by: <a href="/catalog?sort=title">title</a>
-             <a href="/catalog?sort=author">author</a>
-             <a href="/catalog?sort=publisher">publisher</a>
-             <a href="/catalog?sort=dateOfPublication">publication date</a>
+    <form method="get" action="/catalog">
+        <label for="filter">Find books by Title or Author </label><input type="text" id="filter" name="filter" th:value="${filter}">
+        <input type="submit" value="Find">
+    </form>
     <br>
 
-    Page: <span th:text="${page}"/>
-    <a th:href="@{/catalog?sort={sort}&page={page} (sort=${sort}, page=${page-1}) }" th:if="${page>0}">previous</a>
-    <a th:href="@{/catalog?sort={sort}&page={page} (sort=${sort}, page=${page+1}) }" th:if="${page<totalPages-1}">next</a>
+    Sort by: <a th:href="@{/catalog?sort=title&filter={filter} (filter=${filter}) }">title</a>
+             <a th:href="@{/catalog?sort=author&filter={filter} (filter=${filter}) }">author</a>
+             <a th:href="@{/catalog?sort=publisher&filter={filter} (filter=${filter}) }">publisher</a>
+             <a th:href="@{/catalog?sort=dateOfPublication&filter={filter} (filter=${filter}) }">publication date</a>
+    <br>
+
+    Page: <span th:text="${page+1}"/>
+    <a th:href="@{/catalog?sort={sort}&page={page}&filter={filter} (sort=${sort}, page=${page-1}, filter=${filter}) }" th:if="${page>0}">previous</a>
+    <a th:href="@{/catalog?sort={sort}&page={page}&filter={filter} (sort=${sort}, page=${page+1}, filter=${filter}) }" th:if="${page<totalPages-1}">next</a>
     <br>
 
     <table>

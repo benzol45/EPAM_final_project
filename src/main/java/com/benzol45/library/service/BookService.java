@@ -25,12 +25,20 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public List<Book> getAllWithPaging(Pageable pageable) {
-        return bookRepository.findAll(pageable).getContent();
+    public List<Book> getListWithPaging(String filter, Pageable pageable) {
+        if (filter==null || filter.isEmpty()) {
+            return bookRepository.findAll(pageable).getContent();
+        } else {
+            return bookRepository.findAllByTitleContainsIgnoreCaseOrAuthorContainsIgnoreCase(filter,filter,pageable).getContent();
+        }
     }
 
-    public int getTotalPages(Pageable pageable) {
-        return bookRepository.findAll(pageable).getTotalPages();
+    public int getTotalPages(String filter, Pageable pageable) {
+        if (filter==null || filter.isEmpty()) {
+            return bookRepository.findAll(pageable).getTotalPages();
+        } else {
+            return bookRepository.findAllByTitleContainsIgnoreCaseOrAuthorContainsIgnoreCase(filter,filter,pageable).getTotalPages();
+        }
     }
 
     public Book getById(Long id) {
