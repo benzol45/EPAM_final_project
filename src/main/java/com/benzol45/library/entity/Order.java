@@ -1,11 +1,17 @@
 package com.benzol45.library.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -21,5 +27,5 @@ public class Order {
     private Book book;
 
     private LocalDateTime createDate;
-    //TODO добавить дату когда книга была выдана что бы считать сколько пришлось ждать
+    //TODO добавить признак и дату когда книга была выдана что бы считать сколько пришлось ждать
 }

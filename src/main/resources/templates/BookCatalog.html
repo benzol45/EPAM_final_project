@@ -31,11 +31,14 @@
 
     <table>
         <tr>
-           <th>Title</th>
-           <th>Author</th>
-           <th>Pages</th>
-           <th>Publisher</th>
-           <th>Date of publication</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Pages</th>
+            <th>Publisher</th>
+            <th>Date of publication</th>
+            <th id="order"></th>
+            <th id="edit"></th>
+            <th id="delete"></th>
         </tr>
         <div th:each="book: ${books}">
             <tr>
@@ -44,6 +47,9 @@
                 <td th:text="${book.getPages()}">pages</td>
                 <td th:text="${book.getPublisher()}">publisher</td>
                 <td th:text="${book.getDateOfPublication()}">publicationDate</td>
+                <td><a th:href="@{/book/{id}/order (id=${book.getId()})}">order</a></td>
+                <td><a th:href="@{/book/{id}/edit (id=${book.getId()})}">edit</a></td>
+                <td><a th:href="@{/book/{id}/delete (id=${book.getId()})}">delete</a></td>
             </tr>
         </div>
     </table>
