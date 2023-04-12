@@ -18,7 +18,7 @@ CREATE TABLE users (
     login varchar NOT NULL UNIQUE,
     password varchar NOT NULL,
     is_blocked boolean DEFAULT FALSE,
-    role varchar NOT NULL
+    role varchar NOT NULL DEFAULT 'NA'
 );
 
 CREATE TABLE issued_book (

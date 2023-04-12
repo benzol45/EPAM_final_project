@@ -27,6 +27,7 @@ public class BookController {
         model.addAttribute("book", new Book());
 
         return "BookEdit";
+        //TODO может сработает просто МоделАртибьют ???
     }
 
     @GetMapping("/edit/{id}")
@@ -39,6 +40,7 @@ public class BookController {
 
     @PostMapping
     public String saveBook(@Valid Book book, Errors errors) {
+        //TODO может добавить МоделАртибьют ???
         bookUniqValidator.validate(book, errors);
         if (errors.hasErrors()) {
             return "BookEdit";

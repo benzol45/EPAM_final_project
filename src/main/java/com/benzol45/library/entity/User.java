@@ -1,6 +1,8 @@
 package com.benzol45.library.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,20 +14,33 @@ import java.util.Locale;
 @Entity
 @Table(name = "users")
 //TODO Реализовать UserDetails
+//TODO нужно ли хранить язык для пользователя
+//TODO валидация полей + уникальность на логин
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @NotBlank
     private String fullName;
+
     private String contact;
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated(EnumType.STRING) //default in SQL = EN
     private Language language;
 
+    @NotNull
+    @NotBlank
     private String login;
+
+    @NotNull
+    @NotBlank
     private String password;
+
     private boolean isBlocked;
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated(EnumType.STRING)  //default in SQL = NA
     private Role role;
 
     @Override
@@ -58,11 +73,11 @@ public class User implements UserDetails {
         return false;
     }
 
-    enum Language {
+    public enum Language {
         RU, EN
     }
 
-    enum Role {
-        READER, LIBRARIAN, ADMINISTRATOR
+    public enum Role {
+        NA, READER, LIBRARIAN, ADMINISTRATOR
     }
 }

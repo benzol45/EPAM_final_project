@@ -28,7 +28,6 @@ public class CatalogController {
         model.addAttribute("filter", filter);
         return "BookCatalog";
         //TODO подобрать ширину столбцов в процентах от экрана
-        //TODO Номера страниц выводить +1 а то они щас отображаются начиная с 0
     }
 
 

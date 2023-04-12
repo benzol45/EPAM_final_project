@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users administration</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    <h2>Need to set ROLE</h2>
+    <table>
+        <tr>
+            <th>login</th>
+            <th>full name</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <div th:each="user: ${users_without_role}">
+            <tr>
+                <td th:text="${user.getLogin()}">login</td>
+                <td th:text="${user.getFullName()}">full name</td>
+                <td><a th:href="@{/user/{id}/set/reader (id=${user.getId()})}">set role "reader"</a></td>
+                <td><a th:href="@{/user/{id}/set/librarian (id=${user.getId()})}">set role "librarian"</a></td>
+                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}">DELETE account</a></td>
+            </tr>
+        </div>
+    </table>
+
+    <br>
+    <br>
+    <h2>Blocked</h2>
+    <table>
+        <tr>
+            <th>login</th>
+            <th>full name</th>
+            <th>role</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <div th:each="user: ${users_blocked}">
+            <tr>
+                <td th:text="${user.getLogin()}">login</td>
+                <td th:text="${user.getFullName()}">full name</td>
+                <td th:text="${user.getRole()}">role</td>
+                <td><a th:href="@{/user/{id}/unblock (id=${user.getId()})}">unblock</a></td>
+                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}">DELETE account</a></td>
+            </tr>
+        </div>
+    </table>
+
+    <br>
+    <br>
+    <h2>Active users</h2>
+    <table>
+        <tr>
+            <th>login</th>
+            <th>full name</th>
+            <th>role</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <div th:each="user: ${users_working}">
+            <tr>
+                <td th:text="${user.getLogin()}">login</td>
+                <td th:text="${user.getFullName()}">full name</td>
+                <td th:text="${user.getRole()}">role</td>
+                <td><a th:href="@{/user/{id}/block (id=${user.getId()})}">block</a></td>
+                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}">DELETE account</a></td>
+            </tr>
+        </div>
+    </table>
+</body>
+</html>
