@@ -11,5 +11,6 @@
 
     <changeSet author="author" id="110">
         <sqlFile path="add_data_books.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="add_default_admin.sql" relativeToChangelogFile="true"/>
     </changeSet>
 </databaseChangeLog>
