@@ -3,6 +3,7 @@ package com.benzol45.library.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
 
     @NotNull
     @NotBlank
+    @Size(min = 6, message = "Password must be longer than 5 symbols")
     private String password;
 
     private boolean isBlocked;

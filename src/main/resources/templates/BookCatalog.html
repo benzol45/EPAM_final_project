@@ -39,6 +39,7 @@
             <th id="order"></th>
             <th id="edit"></th>
             <th id="delete"></th>
+            <th id="give"></th>
         </tr>
         <div th:each="book: ${books}">
             <tr>
@@ -47,9 +48,10 @@
                 <td th:text="${book.getPages()}">pages</td>
                 <td th:text="${book.getPublisher()}">publisher</td>
                 <td th:text="${book.getDateOfPublication()}">publicationDate</td>
-                <td><a th:href="@{/book/{id}/order (id=${book.getId()})}">order</a></td>
+                <td><a th:href="@{/book_order/{id} (id=${book.getId()})}">order</a></td>
                 <td><a th:href="@{/book/{id}/edit (id=${book.getId()})}">edit</a></td>
                 <td><a th:href="@{/book/{id}/delete (id=${book.getId()})}">delete</a></td>
+                <td><a th:href="@{/book_give/{id} (id=${book.getId()})}">give</a></td>
             </tr>
         </div>
     </table>

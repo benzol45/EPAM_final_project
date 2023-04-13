@@ -80,4 +80,8 @@ public class UserService {
             return null;
         }
     }
+
+    public List<User> getReaders() {
+        return userRepository.findAllByIsBlockedIsFalseAndRoleIsOrderByFullNameAsc(User.Role.READER);
+    }
 }

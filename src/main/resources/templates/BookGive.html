@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Give book</title>
+</head>
+<body>
+    <form method="post" action="/book_give">
+        <input type="hidden" name="book_id" th:value="${book.getId()}"/>
+        <label for="book_title">Book </label><input type="text" size="128" id="book_title" name="book_title" th:value="${book.getTitle() + ' (' + book.getAuthor() + ')'}"/>
+        <br>
+        <br>
+
+        <label for="reader">Reader </label>
+        <select id="reader" name="reader_id">
+            <div th:each="reader: ${readers}">
+                <option th:value="${reader.getId()}" th:text="${reader.getFullName()}" th:selected="${reader.getId().equals(selectedReaderId)}">reader</option>>
+            </div>
+        </select>
+        <br>
+        <br>
+
+        <label for="checkbox">to reading room</label> <input type="checkbox" id="checkbox" name="to_reading_room">
+        <br>
+        <br>
+
+        <label for="time">Return: </label> <input type="datetime-local" id="time" name="return_date">
+        <br>
+        <br>
+
+        <input type="submit" value="Issue">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+
+<script>
+    const checkbox = document.getElementById('checkbox');
+    const timeInput = document.getElementById('time');
+
+    function setDateNowPlus4Hours() {
+        const now = new Date();
+        const offsetMinutes = now.getTimezoneOffset();
+        const twoHoursFromNow = new Date(now.getTime() + (4 * 60 * 60 * 1000));
+        if (twoHoursFromNow.getHours() >= 19) {
+            twoHoursFromNow.setHours(19);
+            twoHoursFromNow.setMinutes(0);
+            twoHoursFromNow.setSeconds(0);
+            twoHoursFromNow.setMilliseconds(0);
+        }
+
+        const twoHoursFromNowInMyTimeZone = new Date(twoHoursFromNow - (offsetMinutes * 60 * 1000));
+        timeInput.value = twoHoursFromNowInMyTimeZone.toISOString().slice(0, 16);
+    }
+
+    function setDateNowPlus5Days() {
+        const now = new Date();
+        const offsetMinutes = now.getTimezoneOffset();
+        const fiveDaysFromNow = new Date(now.getTime() + (10 * 24 * 60 * 60 * 1000));
+        fiveDaysFromNow.setHours(19);
+        fiveDaysFromNow.setMinutes(0);
+        fiveDaysFromNow.setSeconds(0);
+        fiveDaysFromNow.setMilliseconds(0);
+        if (fiveDaysFromNow.getDay()===0) {
+            fiveDaysFromNow.setDate(fiveDaysFromNow.getDate() + 1);
+        }
+
+        const fiveDaysFromNowInMyTimeZone = new Date(fiveDaysFromNow - (offsetMinutes * 60 * 1000));
+        timeInput.value = fiveDaysFromNowInMyTimeZone.toISOString().slice(0, 16);;
+    }
+
+    setDateNowPlus5Days();
+
+    checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+            setDateNowPlus4Hours();
+        } else {
+            setDateNowPlus5Days();
+        }
+    });
+</script>
+
+</body>
+</html>
