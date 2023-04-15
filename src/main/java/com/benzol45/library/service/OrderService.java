@@ -7,9 +7,11 @@ import com.benzol45.library.repository.BookRepository;
 import com.benzol45.library.repository.OrderRepository;
 import com.benzol45.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,10 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+    }
+
+    public List<Order> getAll() {
+        return orderRepository.findAll(Sort.by("createDate"));
     }
 
 

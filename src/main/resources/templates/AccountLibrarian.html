@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Librarian account</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    Информация о пользователе
+    <br>
+
+    <h2>Readers orders</h2>
+    <table>
+        <tr>
+            <td>Book</td>
+            <td>Reader</td>
+            <td>Create</td>
+            <td id="give"></td>
+        </tr>
+        <div th:each="order: ${orders}">
+            <tr>
+                <td th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</td>
+                <td th:text="${order.getUser().getFullName()}">reader</td>
+                <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
+                <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}">give</a></td>
+            </tr>
+        </div>
+    </table>
+    <br>
+    выданные книги с читателем и датой возврата с возможностью возрата по ожидаемого возврата, цветом - есть ли просрочка, сообщением - сумма штрафа
+</body>
+</html>

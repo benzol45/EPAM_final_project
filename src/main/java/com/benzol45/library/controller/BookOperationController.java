@@ -1,6 +1,7 @@
 package com.benzol45.library.controller;
 
 import com.benzol45.library.service.BookService;
+import com.benzol45.library.service.GivingService;
 import com.benzol45.library.service.OrderService;
 import com.benzol45.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,15 @@ public class BookOperationController {
     private final BookService bookService;
     private final UserService userService;
     private final OrderService orderService;
+    private final GivingService givingService;
 
 
     @Autowired
-    public BookOperationController(BookService bookService, OrderService orderService, UserService userService) {
+    public BookOperationController(BookService bookService, OrderService orderService, UserService userService, GivingService givingService) {
         this.bookService = bookService;
         this.userService = userService;
         this.orderService = orderService;
+        this.givingService = givingService;
     }
 
     @GetMapping("/book_order/{id}")
@@ -36,15 +39,21 @@ public class BookOperationController {
         orderService.orderBook(id, userId);
 
         //TODO перенаправлять в личный кабинет
-        return "redirect:/";
+        return "redirect:/catalog";
     }
 
     @GetMapping("/book_give/{id}")
     //TODO hasRole("librarian")
-    public String getGiveBookPage(@PathVariable("id") Long id, Model model) {
+    //TODO в параметрах могут приехать пользователь и заказ
+    public String getGiveBookPage(@PathVariable("id") Long id,
+                                  @RequestParam(value = "readerId", required = false) Long readerId,
+                                  @RequestParam(value = "orderId", required = false) Long orderId,
+                                  Model model) {
+
         model.addAttribute("book",bookService.getById(id));
         model.addAttribute("readers", userService.getReaders());
-        model.addAttribute("selectedReaderId", null);
+        model.addAttribute("selectedReaderId", readerId);
+        model.addAttribute("orderId", orderId);
 
         return "BookGive";
     }
@@ -53,12 +62,21 @@ public class BookOperationController {
     //TODO hasRole("librarian")
     public String giveBook(@RequestParam("book_id") Long bookId,
                            @RequestParam("reader_id") Long readerId,
-                           @RequestParam("to_reading_room") Boolean toReadingRoom,
+                           @RequestParam(value = "order_id", required = false) Long orderId,
+                           @RequestParam(value = "to_reading_room", defaultValue = "false") Boolean toReadingRoom,
                            @RequestParam("return_date") LocalDateTime returnDate) {
 
-
-        //TODO проверить возможность выдачи и выдать.
-        return null;
+        if (givingService.canGiveBookById(bookId)) {
+            givingService.giveBook(bookId, readerId, orderId, toReadingRoom, returnDate);
+            if (orderId!=null) {
+                return "redirect:/account/librarian";
+            } else {
+                return "redirect:/catalog";
+            }
+        } else {
+            //TODO не можем выдать, ошибку показать
+            return null;
+        }
     }
 
 }

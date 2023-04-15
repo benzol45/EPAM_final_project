@@ -51,7 +51,7 @@
                 <td><a th:href="@{/book_order/{id} (id=${book.getId()})}">order</a></td>
                 <td><a th:href="@{/book/{id}/edit (id=${book.getId()})}">edit</a></td>
                 <td><a th:href="@{/book/{id}/delete (id=${book.getId()})}">delete</a></td>
-                <td><a th:href="@{/book_give/{id} (id=${book.getId()})}">give</a></td>
+                <td><a th:href="@{/book_give/{id} (id=${book.getId()})}" th:if="${canGiveBooks.contains(book)}">give</a></td>
             </tr>
         </div>
     </table>

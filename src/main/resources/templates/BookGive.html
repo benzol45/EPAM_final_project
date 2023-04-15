@@ -6,6 +6,7 @@
 </head>
 <body>
     <form method="post" action="/book_give">
+        <input type="hidden" name="order_id" th:value="${orderId}"/>
         <input type="hidden" name="book_id" th:value="${book.getId()}"/>
         <label for="book_title">Book </label><input type="text" size="128" id="book_title" name="book_title" th:value="${book.getTitle() + ' (' + book.getAuthor() + ')'}"/>
         <br>
