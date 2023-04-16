@@ -9,6 +9,9 @@
             border: 1px solid gray;
             border-collapse: collapse;
         }
+        .redRow {
+            background-color: pink;
+        }
     </style>
 </head>
 <body>
@@ -33,6 +36,30 @@
         </div>
     </table>
     <br>
-    выданные книги с читателем и датой возврата с возможностью возрата по ожидаемого возврата, цветом - есть ли просрочка, сообщением - сумма штрафа
+    <br>
+
+    <h2>Given books</h2>
+    <table>
+        <tr>
+            <td>Book</td>
+            <td>Reader</td>
+            <td>in reading room</td>
+            <td>Given date</td>
+            <td>Return date</td>
+            <td id="return"></td>
+            <td>Fine</td>
+        </tr>
+        <div th:each="givenBook: ${given_books}">
+            <tr th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
+                <td th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</td>
+                <td th:text="${givenBook.getUser().getFullName()}">reader</td>
+                <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
+                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
+                <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
+                <td><a th:href="@{/book_return/{given_book_id} (given_book_id=${givenBook.getId()})}">return</a></td>
+                <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
+            </tr>
+        </div>
+    </table>
 </body>
 </html>

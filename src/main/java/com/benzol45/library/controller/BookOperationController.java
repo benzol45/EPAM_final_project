@@ -1,9 +1,6 @@
 package com.benzol45.library.controller;
 
-import com.benzol45.library.service.BookService;
-import com.benzol45.library.service.GivingService;
-import com.benzol45.library.service.OrderService;
-import com.benzol45.library.service.UserService;
+import com.benzol45.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +17,16 @@ public class BookOperationController {
     private final UserService userService;
     private final OrderService orderService;
     private final GivingService givingService;
+    private final FineService fineService;
 
 
     @Autowired
-    public BookOperationController(BookService bookService, OrderService orderService, UserService userService, GivingService givingService) {
+    public BookOperationController(BookService bookService, OrderService orderService, UserService userService, GivingService givingService, FineService fineService) {
         this.bookService = bookService;
         this.userService = userService;
         this.orderService = orderService;
         this.givingService = givingService;
+        this.fineService = fineService;
     }
 
     @GetMapping("/book_order/{id}")
@@ -44,7 +43,6 @@ public class BookOperationController {
 
     @GetMapping("/book_give/{id}")
     //TODO hasRole("librarian")
-    //TODO в параметрах могут приехать пользователь и заказ
     public String getGiveBookPage(@PathVariable("id") Long id,
                                   @RequestParam(value = "readerId", required = false) Long readerId,
                                   @RequestParam(value = "orderId", required = false) Long orderId,
@@ -76,6 +74,20 @@ public class BookOperationController {
         } else {
             //TODO не можем выдать, ошибку показать
             return null;
+        }
+    }
+
+    @GetMapping("book_return/{given_book_id}/")
+    public String returnBook(@PathVariable("given_book_id") Long givenBookId) {
+        //TODO hasRole("librarian")
+        long fine = fineService.calculateFineForGivenBook(givingService.getById(givenBookId));
+
+        if (fine>0) {
+            //TODO отправить на страницу с информацией о штрафе и кнопкой "Штраф оплачен" и только ОТТУДА проводить возврат книги.
+            return null;
+        } else {
+            givingService.returnBook(givenBookId);
+            return "redirect:/account/librarian";
         }
     }
 

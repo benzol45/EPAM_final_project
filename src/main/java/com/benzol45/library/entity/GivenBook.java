@@ -27,6 +27,7 @@ public class GivenBook {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
+    private LocalDateTime givenDate;
     private LocalDateTime returnDate;
     private boolean inReadingRoom;
 }

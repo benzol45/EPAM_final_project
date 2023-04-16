@@ -8,10 +8,12 @@ import com.benzol45.library.repository.GivenBookRepository;
 import com.benzol45.library.repository.OrderRepository;
 import com.benzol45.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +29,21 @@ public class GivingService {
         this.userRepository = userRepository;
         this.givenBookRepository = givenBookRepository;
         this.orderRepository = orderRepository;
+    }
+
+    public GivenBook getById(Long givenBookId) {
+        Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
+        if (optionalGivenBook.isEmpty()) {
+            //TODO log issue
+            //TODO поймать это исключение
+            throw new IllegalStateException("Can't find the given book by id " + givenBookId);
+        }
+
+        return optionalGivenBook.get();
+    }
+
+    public List<GivenBook> getAll() {
+        return givenBookRepository.findAll(Sort.by("returnDate"));
     }
 
     public boolean canGiveBookById(Long bookId) {
@@ -72,6 +89,7 @@ public class GivingService {
                                 .book(optionalBook.get())
                                 .user(optionalUser.get())
                                 .inReadingRoom(toReadingRoom)
+                                .givenDate(LocalDateTime.now())
                                 .returnDate(returnDate)
                                 .build();
         givenBook = givenBookRepository.save(givenBook);
@@ -81,5 +99,9 @@ public class GivingService {
         }
 
         return givenBook;
+    }
+
+    public void returnBook(Long givenBookId) {
+        givenBookRepository.deleteById(givenBookId);
     }
 }
