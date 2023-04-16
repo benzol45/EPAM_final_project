@@ -1,11 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+        .redRow {
+            background-color: pink;
+        }
+    </style>
 </head>
 <body>
-Заказы по дате создания
-выданные книги а датой возврата по дате возврата, цветом - есть ли просрочка, доп. колонка - сумма штрафа
+Информация о пользователе
+<br>
+
+    <h2>Orders</h2>
+    <table>
+        <tr>
+            <td>Book</td>
+            <td>Create</td>
+            <td id="cancel"></td>
+        </tr>
+        <div th:each="order: ${orders}">
+            <tr>
+                <td th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</td>
+                <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
+                <td><a th:href="@{/order_cancel/{order_id} (order_id=${order.getId()})}">cancel</a></td>
+            </tr>
+        </div>
+    </table>
+    <br>
+    <br>
+
+выданные книги с датой возврата по дате возврата, цветом - есть ли просрочка, доп. колонка - сумма штрафа
+    <h2>Books</h2>
+    <table>
+        <tr>
+            <td>Book</td>
+            <td>in reading room</td>
+            <td>Given date</td>
+            <td>Return date</td>
+            <td>Fine</td>
+        </tr>
+        <div th:each="givenBook: ${given_books}">
+            <tr th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
+                <td th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</td>
+                <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
+                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
+                <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
+                <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
+            </tr>
+        </div>
+    </table>
 </body>
 </html>

@@ -9,29 +9,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class LibrarianAccountController {
+@RequestMapping("/account")
+public class AccountController {
     private final OrderService orderService;
     private final GivingService givingService;
     private final FineService fineService;
 
     @Autowired
-    public LibrarianAccountController(OrderService orderService, GivingService givingService, FineService fineService) {
+    public AccountController(OrderService orderService, GivingService givingService, FineService fineService) {
         this.orderService = orderService;
         this.givingService = givingService;
         this.fineService = fineService;
     }
 
-    @GetMapping("/account/librarian")
+    @ModelAttribute("dateFormatter")
+    public DateTimeFormatter addDateTimeFormatter() {
+        return DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+    }
+
+    @GetMapping("/librarian")
+    //TODO hasRole("librarian")
     public String getLibrarianAccountPage(Model model) {
-
-        model.addAttribute("dateFormatter", DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"));
-
         List<Order> orderList = orderService.getAll();
         model.addAttribute("orders", orderList);
         model.addAttribute("canGiveOrders", orderList.stream().filter(order -> givingService.canGiveBook(order.getBook())).collect(Collectors.toList()));
@@ -44,5 +50,25 @@ public class LibrarianAccountController {
                                 givenBook -> fineService.calculateFineForGivenBook(givenBook))));
 
         return "AccountLibrarian";
+    }
+
+    @GetMapping("/reader")
+    //TODO hasRole("reader")
+    public String getReaderAccountPage(Model model) {
+
+        //TODO получать как параметр пользователя и всё делать относительно него, временно захардкодил
+        Long readerId = 1L;
+
+        List<Order> orderList = orderService.getAllByUserId(readerId);
+        model.addAttribute("orders", orderList);
+
+        List<GivenBook> givenBooks = givingService.getAllByUserId(readerId);
+        model.addAttribute("given_books", givenBooks);
+        model.addAttribute("fines",givenBooks.stream()
+                .collect(Collectors.toMap(
+                        givenBook -> givenBook,
+                        givenBook -> fineService.calculateFineForGivenBook(givenBook))));
+
+        return "AccountReader";
     }
 }

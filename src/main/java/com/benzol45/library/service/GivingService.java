@@ -31,6 +31,10 @@ public class GivingService {
         this.orderRepository = orderRepository;
     }
 
+    public List<GivenBook> getAllByUserId(Long userId) {
+        return givenBookRepository.findAllByUserId(userId, Sort.by("returnDate"));
+    }
+
     public GivenBook getById(Long givenBookId) {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {

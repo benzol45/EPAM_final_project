@@ -91,4 +91,14 @@ public class BookOperationController {
         }
     }
 
+    @GetMapping("/order_cancel/{order_id}")
+    //TODO hasRole("reader")
+    public String cancelOrder(@PathVariable("order_id") Long orderId) {
+        //TODO получить активного пользователя из параметров и проверить что это его заказ - чужие отменять НЕЛЬЗЯ, только свои
+
+        orderService.deleteOrder(orderId);
+
+        return "redirect:/account/reader";
+    }
+
 }

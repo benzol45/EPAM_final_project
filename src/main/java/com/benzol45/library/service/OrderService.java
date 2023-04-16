@@ -31,6 +31,13 @@ public class OrderService {
         return orderRepository.findAll(Sort.by("createDate"));
     }
 
+    public List<Order> getAllByUserId(Long userId) {
+        return orderRepository.findAllByUserId(userId, Sort.by("createDate"));
+    }
+
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
+    }
 
     public Order orderBook(Long bookId, Long userId) {
         //Книга есть и пользователь есть
