@@ -35,6 +35,10 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId, Sort.by("createDate"));
     }
 
+    public boolean isOwner(Long orderId, User userDetails) {
+        return orderRepository.findById(orderId).get().getUser().equals(userDetails);
+    }
+
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
     }

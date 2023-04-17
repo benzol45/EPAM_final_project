@@ -1,8 +1,11 @@
 package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.GivenBook;
+import com.benzol45.library.entity.User;
 import com.benzol45.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,18 +100,23 @@ public class BookOperationController {
     }
 
     @GetMapping("book_return_with_fine/{given_book_id}")
+    //TODO hasRole("librarian")
     public String returnBookWithFine(@PathVariable("given_book_id") Long givenBookId) {
-        //TODO hasRole("librarian")
+        //TODO залогировать что взяли штраф ? или записать в какую базу ?
         givingService.returnBook(givenBookId);
         return "redirect:/account/librarian";
     }
 
     @GetMapping("/order_cancel/{order_id}")
     //TODO hasRole("reader")
-    public String cancelOrder(@PathVariable("order_id") Long orderId) {
-        //TODO получить активного пользователя из параметров и проверить что это его заказ - чужие отменять НЕЛЬЗЯ, только свои
+    public String cancelOrder(@PathVariable("order_id") Long orderId, @AuthenticationPrincipal UserDetails userDetails) {
+        if (!(userDetails instanceof User)) {
+            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
+        }
 
-        orderService.deleteOrder(orderId);
+        if (orderService.isOwner(orderId,(User)userDetails)) {
+            orderService.deleteOrder(orderId);
+        }
 
         return "redirect:/account/reader";
     }

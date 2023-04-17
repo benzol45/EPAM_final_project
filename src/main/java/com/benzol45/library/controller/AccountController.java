@@ -2,10 +2,13 @@ package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.Order;
+import com.benzol45.library.entity.User;
 import com.benzol45.library.service.FineService;
 import com.benzol45.library.service.GivingService;
 import com.benzol45.library.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,10 +57,12 @@ public class AccountController {
 
     @GetMapping("/reader")
     //TODO hasRole("reader")
-    public String getReaderAccountPage(Model model) {
+    public String getReaderAccountPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (!(userDetails instanceof User)) {
+            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
+        }
 
-        //TODO получать как параметр пользователя и всё делать относительно него, временно захардкодил
-        Long readerId = 1L;
+        Long readerId = ((User)userDetails).getId();
 
         List<Order> orderList = orderService.getAllByUserId(readerId);
         model.addAttribute("orders", orderList);
