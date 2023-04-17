@@ -1,5 +1,6 @@
 package com.benzol45.library.controller;
 
+import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,18 +78,29 @@ public class BookOperationController {
         }
     }
 
-    @GetMapping("book_return/{given_book_id}/")
-    public String returnBook(@PathVariable("given_book_id") Long givenBookId) {
+    @GetMapping("book_return/{given_book_id}")
+    public String returnBook(@PathVariable("given_book_id") Long givenBookId, Model model) {
         //TODO hasRole("librarian")
-        long fine = fineService.calculateFineForGivenBook(givingService.getById(givenBookId));
+        GivenBook givenBook = givingService.getById(givenBookId);
+        long fine = fineService.calculateFineForGivenBook(givenBook);
 
         if (fine>0) {
             //TODO отправить на страницу с информацией о штрафе и кнопкой "Штраф оплачен" и только ОТТУДА проводить возврат книги.
-            return null;
+            model.addAttribute("message", fineService.explainFain(givenBook));
+            model.addAttribute("fain",fine);
+            model.addAttribute("givenBook", givenBook);
+            return "Fine";
         } else {
             givingService.returnBook(givenBookId);
             return "redirect:/account/librarian";
         }
+    }
+
+    @GetMapping("book_return_with_fine/{given_book_id}")
+    public String returnBookWithFine(@PathVariable("given_book_id") Long givenBookId) {
+        //TODO hasRole("librarian")
+        givingService.returnBook(givenBookId);
+        return "redirect:/account/librarian";
     }
 
     @GetMapping("/order_cancel/{order_id}")
