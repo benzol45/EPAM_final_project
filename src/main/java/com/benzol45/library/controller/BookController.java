@@ -3,8 +3,6 @@ package com.benzol45.library.controller;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.validator.BookUniqValidator;
 import com.benzol45.library.service.BookService;
-import com.benzol45.library.service.OrderService;
-import com.benzol45.library.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,13 +23,11 @@ public class BookController {
     }
 
     @GetMapping("/new")
-    //TODO hasRole("Admin")
     public String getNewBookPage(@ModelAttribute Book book) {
         return "BookEdit";
     }
 
     @GetMapping("/{id}/edit")
-    //TODO hasRole("Admin")
     public String getEditBookPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("book", bookService.getById(id));
 
@@ -39,7 +35,6 @@ public class BookController {
     }
 
     @PostMapping
-    //TODO hasRole("Admin")
     public String saveBook(@ModelAttribute @Valid Book book, Errors errors) {
         bookUniqValidator.validate(book, errors);
         if (errors.hasErrors()) {
@@ -52,10 +47,11 @@ public class BookController {
     }
 
     @GetMapping("/{id}/delete")
-    //TODO hasRole("Admin")
     public String deleteBook(@PathVariable("id") Long id) {
         bookService.deleteById(id);
 
         return "redirect:/catalog";
     }
+
+    //TODO add GET /book/{id}/info for book information
 }

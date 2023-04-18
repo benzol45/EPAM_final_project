@@ -34,19 +34,17 @@ public class BookOperationController {
     }
 
     @GetMapping("/book_order/{id}")
-    //TODO hasRole("reader")
-    //TODO сюда добавить в параметры пользователя и заменить хардкод на него
-    public String orderBook(@PathVariable("id") Long id) {
-        Long userId = 1L;
+    public String orderBook(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        if (!(userDetails instanceof User)) {
+            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
+        }
 
-        orderService.orderBook(id, userId);
+        orderService.orderBook(id, ((User)userDetails).getId());
 
-        //TODO перенаправлять в личный кабинет
         return "redirect:/catalog";
     }
 
     @GetMapping("/book_give/{id}")
-    //TODO hasRole("librarian")
     public String getGiveBookPage(@PathVariable("id") Long id,
                                   @RequestParam(value = "readerId", required = false) Long readerId,
                                   @RequestParam(value = "orderId", required = false) Long orderId,
@@ -61,7 +59,6 @@ public class BookOperationController {
     }
 
     @PostMapping("/book_give")
-    //TODO hasRole("librarian")
     public String giveBook(@RequestParam("book_id") Long bookId,
                            @RequestParam("reader_id") Long readerId,
                            @RequestParam(value = "order_id", required = false) Long orderId,
@@ -81,15 +78,13 @@ public class BookOperationController {
         }
     }
 
-    @GetMapping("book_return/{given_book_id}")
+    @GetMapping("/book_return/{given_book_id}")
     public String returnBook(@PathVariable("given_book_id") Long givenBookId, Model model) {
-        //TODO hasRole("librarian")
         GivenBook givenBook = givingService.getById(givenBookId);
         long fine = fineService.calculateFineForGivenBook(givenBook);
 
         if (fine>0) {
-            //TODO отправить на страницу с информацией о штрафе и кнопкой "Штраф оплачен" и только ОТТУДА проводить возврат книги.
-            model.addAttribute("message", fineService.explainFain(givenBook));
+            model.addAttribute("message", fineService.explainFine(givenBook));
             model.addAttribute("fain",fine);
             model.addAttribute("givenBook", givenBook);
             return "Fine";
@@ -99,8 +94,7 @@ public class BookOperationController {
         }
     }
 
-    @GetMapping("book_return_with_fine/{given_book_id}")
-    //TODO hasRole("librarian")
+    @GetMapping("/book_return_with_fine/{given_book_id}")
     public String returnBookWithFine(@PathVariable("given_book_id") Long givenBookId) {
         //TODO залогировать что взяли штраф ? или записать в какую базу ?
         givingService.returnBook(givenBookId);
@@ -108,7 +102,6 @@ public class BookOperationController {
     }
 
     @GetMapping("/order_cancel/{order_id}")
-    //TODO hasRole("reader")
     public String cancelOrder(@PathVariable("order_id") Long orderId, @AuthenticationPrincipal UserDetails userDetails) {
         if (!(userDetails instanceof User)) {
             //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем

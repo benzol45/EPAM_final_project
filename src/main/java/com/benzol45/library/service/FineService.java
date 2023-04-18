@@ -36,15 +36,15 @@ public class FineService {
     }
 
     private long getHoursForFain(GivenBook givenBook) {
-        long minutes = Duration.between(givenBook.getReturnDate(), LocalDateTime.now()).get(ChronoUnit.SECONDS);
-        return minutes / (60*60) + ((minutes % (60*60) == 0) ? 0 : 1);
+        long seconds = Duration.between(givenBook.getReturnDate(), LocalDateTime.now()).get(ChronoUnit.SECONDS);
+        return seconds / (60*60) + ((seconds % (60*60) == 0) ? 0 : 1);
     }
 
     private long getDaysForFain(GivenBook givenBook) {
         return Period.between(givenBook.getReturnDate().toLocalDate(), LocalDate.now()).get(ChronoUnit.DAYS);
     }
 
-    public String explainFain(GivenBook givenBook) {
+    public String explainFine(GivenBook givenBook) {
         if (!haveFain(givenBook)) {
             return "No fain";
         }

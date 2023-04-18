@@ -49,7 +49,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}/set/{role}")
-    //TODO hasRole("Admin")
     public String setUserRole(@PathVariable("id") Long id, @PathVariable("role") String roleString) {
         User.Role role = User.Role.valueOf(roleString.toUpperCase());
         if (role!=null) {
@@ -61,7 +60,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}/delete")
-    //TODO hasRole("Admin")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUserById(id);
 
@@ -69,7 +67,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}/unblock")
-    //TODO hasRole("Admin")
     public String unblockUser(@PathVariable("id") Long id) {
         userService.unblock(id);
 
@@ -77,7 +74,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}/block")
-    //TODO hasRole("Admin")
     public String blockUser(@PathVariable("id") Long id) {
         userService.block(id);
 

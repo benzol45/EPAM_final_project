@@ -6,6 +6,7 @@ import com.benzol45.library.entity.User;
 import com.benzol45.library.service.FineService;
 import com.benzol45.library.service.GivingService;
 import com.benzol45.library.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +40,6 @@ public class AccountController {
     }
 
     @GetMapping("/librarian")
-    //TODO hasRole("librarian")
     public String getLibrarianAccountPage(Model model) {
         List<Order> orderList = orderService.getAll();
         model.addAttribute("orders", orderList);
@@ -56,7 +56,6 @@ public class AccountController {
     }
 
     @GetMapping("/reader")
-    //TODO hasRole("reader")
     public String getReaderAccountPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (!(userDetails instanceof User)) {
             //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
