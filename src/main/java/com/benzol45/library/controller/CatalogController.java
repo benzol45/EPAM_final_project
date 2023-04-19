@@ -2,6 +2,7 @@ package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.property.PropertyHolder;
 import com.benzol45.library.service.BookService;
 import com.benzol45.library.service.GivingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,20 @@ import java.util.stream.Collectors;
 public class CatalogController {
     private final BookService bookService;
     private final GivingService givingService;
+    private final PropertyHolder propertyHolder;
 
     @Autowired
-    public CatalogController(BookService bookService, GivingService givingService) {
+    public CatalogController(BookService bookService, GivingService givingService, PropertyHolder propertyHolder) {
         this.bookService = bookService;
         this.givingService = givingService;
+        this.propertyHolder = propertyHolder;
     }
 
     @GetMapping
     public String getCatalogPage(Model model,
                                  @ModelAttribute PageableParam pageableParam, @RequestParam(value = "filter",required = false, defaultValue = "") String filter,
                                  @AuthenticationPrincipal UserDetails userDetails) {
+        pageableParam.setBookOnPage(propertyHolder.getBooksOnPage());
         List<Book> bookList = bookService.getListWithPaging(filter,pageableParam.getPageable());
         model.addAttribute("books", bookList);
         model.addAttribute("canGiveBooks", bookList.stream().filter(givingService::canGiveBook).collect(Collectors.toList()));

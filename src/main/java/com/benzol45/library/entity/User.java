@@ -16,9 +16,7 @@ import java.util.Locale;
 @Data
 @Entity
 @Table(name = "users")
-//TODO Реализовать UserDetails
 //TODO нужно ли хранить язык для пользователя
-//TODO валидация полей + уникальность на логин
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

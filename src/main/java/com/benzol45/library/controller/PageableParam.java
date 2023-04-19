@@ -3,14 +3,12 @@ package com.benzol45.library.controller;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
-
-//@ConfigurationProperties(prefix = "book")
-//TODO Размер старницы - в пропертис и внедрять через @ConfigurationProperties
 //https://www.baeldung.com/spring-data-jpa-pagination-sorting
 
 @Data
@@ -18,9 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PageableParam {
     private int page;
-    private int bookOnPage = 10;
+    private int bookOnPage;
     private String sort;
-
 
     public Pageable getPageable() {
         if (sort ==null || sort.isBlank()) {
