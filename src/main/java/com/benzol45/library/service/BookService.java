@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 
@@ -46,10 +47,12 @@ public class BookService {
         return bookRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Can't find book with id " + id));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Book save(Book book) {
         return bookRepository.save(book);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }

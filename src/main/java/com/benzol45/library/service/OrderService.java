@@ -8,6 +8,7 @@ import com.benzol45.library.repository.OrderRepository;
 import com.benzol45.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     public List<Order> getAll() {
         return orderRepository.findAll(Sort.by("createDate"));
     }
@@ -39,10 +41,12 @@ public class OrderService {
         return orderRepository.findById(orderId).get().getUser().equals(userDetails);
     }
 
+    @PreAuthorize("hasRole('READER')")
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     public Order orderBook(Long bookId, Long userId) {
         //Книга есть и пользователь есть
         Optional<Book> optionalBook = bookRepository.findById(bookId);

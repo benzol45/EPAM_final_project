@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,12 +27,14 @@ public class ISBNservice {
         this.restTemplate = restTemplate;
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public static boolean isCorrect(String isbn) {
     //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BD%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9_%D0%BD%D0%BE%D0%BC%D0%B5%D1%80
         //TODO реализовать проверку по формату 10 и 13 символов   "978"+10
         return true;
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Optional<Book> fillByISBN(String isbn) {
         if (!isCorrect(isbn)) {
             return Optional.empty();

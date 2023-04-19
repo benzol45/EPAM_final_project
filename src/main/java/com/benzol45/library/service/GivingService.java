@@ -9,6 +9,7 @@ import com.benzol45.library.repository.OrderRepository;
 import com.benzol45.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +32,12 @@ public class GivingService {
         this.orderRepository = orderRepository;
     }
 
+    @PreAuthorize("isAuthenticated()")
     public List<GivenBook> getAllByUserId(Long userId) {
         return givenBookRepository.findAllByUserId(userId, Sort.by("returnDate"));
     }
 
+    @PreAuthorize("isAuthenticated()")
     public GivenBook getById(Long givenBookId) {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {
@@ -46,6 +49,7 @@ public class GivingService {
         return optionalGivenBook.get();
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     public List<GivenBook> getAll() {
         return givenBookRepository.findAll(Sort.by("returnDate"));
     }
@@ -73,6 +77,7 @@ public class GivingService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('LIBRARIAN')")
     public GivenBook giveBook(Long bookId, Long readerId, Long orderId, Boolean toReadingRoom, LocalDateTime returnDate) {
         if (!canGiveBookById(bookId)) {
             //TODO log issue
@@ -105,6 +110,7 @@ public class GivingService {
         return givenBook;
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     public void returnBook(Long givenBookId) {
         givenBookRepository.deleteById(givenBookId);
     }

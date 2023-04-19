@@ -36,7 +36,7 @@ public class UserController {
 
         userService.saveNewUser(user);
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     @GetMapping("/admin")

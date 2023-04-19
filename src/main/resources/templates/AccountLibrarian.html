@@ -26,14 +26,12 @@
             <td>Create</td>
             <td id="give"></td>
         </tr>
-        <div th:each="order: ${orders}">
-            <tr>
-                <td th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</td>
-                <td th:text="${order.getUser().getFullName()}">reader</td>
-                <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
-                <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}">give</a></td>
-            </tr>
-        </div>
+        <tr th:each="order: ${orders}">
+            <td th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</td>
+            <td th:text="${order.getUser().getFullName()}">reader</td>
+            <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
+            <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}">give</a></td>
+        </tr>
     </table>
     <br>
     <br>
@@ -49,17 +47,15 @@
             <td id="return"></td>
             <td>Fine</td>
         </tr>
-        <div th:each="givenBook: ${given_books}">
-            <tr th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
-                <td th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</td>
-                <td th:text="${givenBook.getUser().getFullName()}">reader</td>
-                <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
-                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
-                <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
-                <td><a th:href="@{/book_return/{given_book_id} (given_book_id=${givenBook.getId()})}">return</a></td>
-                <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
-            </tr>
-        </div>
+        <tr th:each="givenBook: ${given_books}" th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
+            <td th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</td>
+            <td th:text="${givenBook.getUser().getFullName()}">reader</td>
+            <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
+            <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
+            <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
+            <td><a th:href="@{/book_return/{given_book_id} (given_book_id=${givenBook.getId()})}">return</a></td>
+            <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
+        </tr>
     </table>
 </body>
 </html>

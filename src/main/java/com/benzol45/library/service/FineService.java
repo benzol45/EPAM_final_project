@@ -1,6 +1,7 @@
 package com.benzol45.library.service;
 
 import com.benzol45.library.entity.GivenBook;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -17,10 +18,12 @@ public class FineService {
     private final int hourFain = 1;
     private final int dayFain = 10;
 
+    @PreAuthorize("isAuthenticated()")
     public boolean haveFain(GivenBook givenBook) {
         return givenBook.getReturnDate().isBefore(LocalDateTime.now());
     }
 
+    @PreAuthorize("isAuthenticated()")
     public long calculateFineForGivenBook(GivenBook givenBook) {
         if (!haveFain(givenBook)) {
             return 0;
@@ -44,6 +47,7 @@ public class FineService {
         return Period.between(givenBook.getReturnDate().toLocalDate(), LocalDate.now()).get(ChronoUnit.DAYS);
     }
 
+    @PreAuthorize("isAuthenticated()")
     public String explainFine(GivenBook givenBook) {
         if (!haveFain(givenBook)) {
             return "No fain";
