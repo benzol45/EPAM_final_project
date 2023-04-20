@@ -35,11 +35,7 @@ public class BookOperationController {
 
     @GetMapping("/book_order/{id}")
     public String orderBook(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        if (!(userDetails instanceof User)) {
-            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
-        }
-
-        orderService.orderBook(id, ((User)userDetails).getId());
+        orderService.orderBook(id, userService.getUser(userDetails).getId());
 
         return "redirect:/catalog";
     }
@@ -103,10 +99,6 @@ public class BookOperationController {
 
     @GetMapping("/order_cancel/{order_id}")
     public String cancelOrder(@PathVariable("order_id") Long orderId, @AuthenticationPrincipal UserDetails userDetails) {
-        if (!(userDetails instanceof User)) {
-            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
-        }
-
         if (orderService.isOwner(orderId,(User)userDetails)) {
             orderService.deleteOrder(orderId);
         }

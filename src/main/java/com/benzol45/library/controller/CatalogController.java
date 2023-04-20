@@ -5,6 +5,7 @@ import com.benzol45.library.entity.User;
 import com.benzol45.library.property.PropertyHolder;
 import com.benzol45.library.service.BookService;
 import com.benzol45.library.service.GivingService;
+import com.benzol45.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,12 +24,14 @@ import java.util.stream.Collectors;
 public class CatalogController {
     private final BookService bookService;
     private final GivingService givingService;
+    private final UserService userService;
     private final PropertyHolder propertyHolder;
 
     @Autowired
-    public CatalogController(BookService bookService, GivingService givingService, PropertyHolder propertyHolder) {
+    public CatalogController(BookService bookService, GivingService givingService, UserService userService, PropertyHolder propertyHolder) {
         this.bookService = bookService;
         this.givingService = givingService;
+        this.userService = userService;
         this.propertyHolder = propertyHolder;
     }
 
@@ -45,10 +48,7 @@ public class CatalogController {
         model.addAttribute("sort", pageableParam.getSort());
         model.addAttribute("filter", filter);
         if (userDetails!=null) {
-            if (!(userDetails instanceof User)) {
-                //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
-            }
-            model.addAttribute("role", ((User)userDetails).getRole().toString());
+            model.addAttribute("role", userService.getRole(userDetails).toString());
         }
         return "BookCatalog";
         //TODO подобрать ширину столбцов в процентах от экрана

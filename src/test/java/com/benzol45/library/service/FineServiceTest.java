@@ -12,13 +12,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FineServiceTest {
     static FineService fineService;
-    static PropertyHolder propertyHolder;
+    static Long hourFine = 1L;
+    static Long dayFine = 10L;
 
     @BeforeAll
     static void createFineService() {
-        propertyHolder = new PropertyHolder();
-        propertyHolder.setFineForHourInReadingRoom(1);
-        propertyHolder.setFineForDayOnSubscription(10);
+        PropertyHolder propertyHolder = new PropertyHolder();
+        propertyHolder.setFineForHourInReadingRoom(hourFine.intValue());
+        propertyHolder.setFineForDayOnSubscription(dayFine.intValue());
         fineService = new FineService(propertyHolder);
     }
 
@@ -42,23 +43,23 @@ class FineServiceTest {
         assertEquals(0,fineService.calculateFineForGivenBook(givenBookNow));
 
         GivenBook givenBookMinus1SecondsToReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().minusSeconds(1)).inReadingRoom(true).build();
-        assertEquals(propertyHolder.getFineForHourInReadingRoom(),fineService.calculateFineForGivenBook(givenBookMinus1SecondsToReadingRoom));
+        assertEquals(hourFine,fineService.calculateFineForGivenBook(givenBookMinus1SecondsToReadingRoom));
         GivenBook givenBookMinus1MinutesToReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().minusMinutes(1)).inReadingRoom(true).build();
-        assertEquals(propertyHolder.getFineForHourInReadingRoom(),fineService.calculateFineForGivenBook(givenBookMinus1MinutesToReadingRoom));
+        assertEquals(hourFine,fineService.calculateFineForGivenBook(givenBookMinus1MinutesToReadingRoom));
         GivenBook givenBookMinus60MinutesToReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().minusMinutes(60)).inReadingRoom(true).build();
-        assertEquals(propertyHolder.getFineForHourInReadingRoom(),fineService.calculateFineForGivenBook(givenBookMinus60MinutesToReadingRoom));
+        assertEquals(hourFine,fineService.calculateFineForGivenBook(givenBookMinus60MinutesToReadingRoom));
         GivenBook givenBookMinus61MinutesToReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().minusMinutes(61)).inReadingRoom(true).build();
-        assertEquals(2L*propertyHolder.getFineForHourInReadingRoom(),fineService.calculateFineForGivenBook(givenBookMinus61MinutesToReadingRoom));
+        assertEquals(2L*hourFine,fineService.calculateFineForGivenBook(givenBookMinus61MinutesToReadingRoom));
 
         GivenBook givenBookMinus1SecondsNotReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().minusSeconds(1)).inReadingRoom(false).build();
         assertEquals(0,fineService.calculateFineForGivenBook(givenBookMinus1SecondsNotReadingRoom));
         GivenBook givenBookMinus60MinutesNotReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().minusMinutes(60)).inReadingRoom(false).build();
         assertEquals(0,fineService.calculateFineForGivenBook(givenBookMinus60MinutesNotReadingRoom));
         GivenBook givenBookLastDayMinus2MinutesNotReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().withHour(0).withMinute(0).minusMinutes(2)).inReadingRoom(false).build();
-        assertEquals(propertyHolder.getFineForDayOnSubscription(),fineService.calculateFineForGivenBook(givenBookLastDayMinus2MinutesNotReadingRoom));
+        assertEquals(dayFine,fineService.calculateFineForGivenBook(givenBookLastDayMinus2MinutesNotReadingRoom));
         GivenBook givenBookLastDayMinus2HoursNotReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().withHour(0).withMinute(0).minusHours(2)).inReadingRoom(false).build();
-        assertEquals(propertyHolder.getFineForDayOnSubscription(),fineService.calculateFineForGivenBook(givenBookLastDayMinus2HoursNotReadingRoom));
+        assertEquals(dayFine,fineService.calculateFineForGivenBook(givenBookLastDayMinus2HoursNotReadingRoom));
         GivenBook givenBookLastDayMinus26HoursNotReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().withHour(0).withMinute(0).minusHours(26)).inReadingRoom(false).build();
-        assertEquals(2L*propertyHolder.getFineForDayOnSubscription(),fineService.calculateFineForGivenBook(givenBookLastDayMinus26HoursNotReadingRoom));
+        assertEquals(2L*dayFine,fineService.calculateFineForGivenBook(givenBookLastDayMinus26HoursNotReadingRoom));
     }
 }

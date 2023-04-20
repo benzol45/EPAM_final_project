@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +92,22 @@ public class UserService {
             return userRepository.save(user);
         } else {
             return null;
+        }
+    }
+
+    public User.Role getRole(UserDetails userDetails) {
+        return getUser(userDetails).getRole();
+    }
+
+    public User getUser(UserDetails userDetails) {
+        checkUserDetails(userDetails);
+        return (User)userDetails;
+    }
+
+    private void checkUserDetails(UserDetails userDetails) {
+        if (!(userDetails instanceof User)) {
+            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
+            //Логируем и вернём null или кидаем исключение ? правильнее - исклюение
         }
     }
 }

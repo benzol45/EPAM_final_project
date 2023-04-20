@@ -6,7 +6,7 @@ import com.benzol45.library.entity.User;
 import com.benzol45.library.service.FineService;
 import com.benzol45.library.service.GivingService;
 import com.benzol45.library.service.OrderService;
-import lombok.extern.slf4j.Slf4j;
+import com.benzol45.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,12 +26,14 @@ public class AccountController {
     private final OrderService orderService;
     private final GivingService givingService;
     private final FineService fineService;
+    private final UserService userService;
 
     @Autowired
-    public AccountController(OrderService orderService, GivingService givingService, FineService fineService) {
+    public AccountController(OrderService orderService, GivingService givingService, FineService fineService, UserService userService) {
         this.orderService = orderService;
         this.givingService = givingService;
         this.fineService = fineService;
+        this.userService = userService;
     }
 
     @ModelAttribute("dateFormatter")
@@ -57,11 +59,7 @@ public class AccountController {
 
     @GetMapping("/reader")
     public String getReaderAccountPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (!(userDetails instanceof User)) {
-            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
-        }
-
-        Long readerId = ((User)userDetails).getId();
+        Long readerId = userService.getUser(userDetails).getId();
 
         List<Order> orderList = orderService.getAllByUserId(readerId);
         model.addAttribute("orders", orderList);
