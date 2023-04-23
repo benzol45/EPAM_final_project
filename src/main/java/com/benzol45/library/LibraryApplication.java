@@ -18,8 +18,6 @@ public class LibraryApplication {
         return (new RestTemplateBuilder()).build();
     }
 
-    //Перехват эксепшенов https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
-    //                      https://www.baeldung.com/spring-security-custom-access-denied-page
     //Мультиязык
     //Покрытие тестами
 

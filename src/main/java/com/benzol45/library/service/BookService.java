@@ -3,13 +3,9 @@ package com.benzol45.library.service;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 

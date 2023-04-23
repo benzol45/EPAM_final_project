@@ -5,8 +5,8 @@
     <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
     <import class="ch.qos.logback.core.ConsoleAppender"/>
 
-<!--https://www.codelord.net/2010/08/27/logging-with-a-context-users-in-logback-and-spring-security/ comments about adding user information to log
-    [%mdc{user} %mdc{session}]      -->
+<!--    https://www.codelord.net/2010/08/27/logging-with-a-context-users-in-logback-and-spring-security/ comments about adding user information to log
+        [%mdc{user} %mdc{session}]      -->
 
 <!--    https://intellij-support.jetbrains.com/hc/en-us/community/posts/10316380313874-logback-xml-effects-on-IntelIj-console-default-colors-how-I-can-fix-it-
         save default view of console logging with colors-->
@@ -29,9 +29,9 @@
         </encoder>
     </appender>
 
-<!--    <logger name="LoggerLesson" level="INFO">-->
-<!--        <appender-ref ref="ROLLING_FILE"/>-->
-<!--    </logger>-->
+    <logger name="com.benzol45.library" level="INFO">
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

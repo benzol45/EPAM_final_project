@@ -2,9 +2,7 @@ package com.benzol45.library.service;
 
 import com.benzol45.library.entity.User;
 import com.benzol45.library.repository.UserRepository;
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;

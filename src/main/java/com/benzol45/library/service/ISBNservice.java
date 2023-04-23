@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -34,15 +36,52 @@ public class ISBNservice {
         return true;
     }
 
+    private String prepareISBN(String ISBN) {
+        return ISBN.replaceAll("\\D","");
+    }
+
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Optional<Book> fillByISBN(String isbn) {
-        if (!isCorrect(isbn)) {
+    public Optional<String> getCoverImageURL(String isbn) {
+        ResponseEntity<Map> entity = getResponseEntity(isbn);
+        if (entity==null) {
             return Optional.empty();
         }
 
-        ResponseEntity<Map> entity = restTemplate.getForEntity("https://openlibrary.org/isbn/"+isbn+".json", Map.class);
-        log.info("Request book info from openlibrary.org, ISBN: {}. Response code: {}",isbn,entity.getStatusCode().value());
+        Map body = entity.getBody();
+        if (((List)body.get("covers")).isEmpty()) {
+            return Optional.empty();
+        }
+        Integer coverId = (Integer) ((List)body.get("covers")).get(0);
+        String url = "https://covers.openlibrary.org/b/id/"+coverId+"-M.jpg";
+
+        return Optional.of(url);
+    }
+
+    private ResponseEntity<Map> getResponseEntity(String isbn) {
+        isbn = prepareISBN(isbn);
+        if (!isCorrect(isbn)) {
+            return null;
+        }
+
+        ResponseEntity<Map> entity = null;
+        try {
+            entity = restTemplate.getForEntity("https://openlibrary.org/isbn/"+isbn+".json", Map.class);
+            log.info("Request book info from openlibrary.org, ISBN: {}. Response code: {}",isbn,entity.getStatusCode().value());
+        } catch (HttpClientErrorException e) {
+            return null;
+        }
+
         if (entity.getStatusCode()!= HttpStatusCode.valueOf(200)) {
+            return null;
+        } else {
+            return entity;
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public Optional<Book> fillByISBN(String isbn) {
+        ResponseEntity<Map> entity = getResponseEntity(isbn);
+        if (entity==null) {
             return Optional.empty();
         }
         Map body = entity.getBody();

@@ -49,4 +49,25 @@ class ISBNserviceTest {
         assertEquals("MockPublisher", book.getPublisher());
         assertEquals(LocalDate.of(2011,1,10), book.getDateOfPublication());
     }
+
+    @Test
+    void getCoverImageMock() {
+        RestTemplate mockRestTemplate = Mockito.mock(RestTemplate.class);
+        Map<String,Object> bookResponse = Map.of("isbn_13", List.of("1234567890128"), "covers", List.of(12345));
+        when(mockRestTemplate.getForEntity(contains("https://openlibrary.org/isbn"),any())).thenReturn(ResponseEntity.ok().body(bookResponse));
+
+        ISBNservice isbnService = new ISBNservice(mockRestTemplate);
+        assertEquals("https://covers.openlibrary.org/b/id/12345-M.jpg",isbnService.getCoverImageURL("9780544003415").get());
+        assertEquals("https://covers.openlibrary.org/b/id/12345-M.jpg",isbnService.getCoverImageURL("978-0-5440-0341-5").get());
+    }
+
+    @Test
+    void getCoverImageRealConnecting() {
+        ISBNservice isbnService = new ISBNservice(new RestTemplate());
+        assertTrue(isbnService.getCoverImageURL("978-5-9614-8320-8").isEmpty()); //нету
+        assertTrue(isbnService.getCoverImageURL("978-5-9614-8320-8-999").isEmpty()); //нету, ошибочный
+        assertTrue(isbnService.getCoverImageURL("978-0-5440-0341-5").isPresent()); //есть
+        assertTrue(isbnService.getCoverImageURL("9780544003415").isPresent()); //есть
+        assertEquals("https://covers.openlibrary.org/b/id/13911921-M.jpg",isbnService.getCoverImageURL("9780544003415").get());
+    }
 }
