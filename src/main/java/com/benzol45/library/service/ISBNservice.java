@@ -92,7 +92,7 @@ public class ISBNservice {
         Map body = entity.getBody();
         Book.BookBuilder bookBuilder = Book.builder();
         bookBuilder.ISBN((String) ((List)body.get("isbn_13")).get(0));
-        bookBuilder.author(getAuthors((List)body.get("authors")));  //переехал /works и там искать
+        bookBuilder.author(getAuthors(body));
         bookBuilder.title((String) body.get("title"));
         bookBuilder.pages(body.get("number_of_pages")!= null ? (Integer)body.get("number_of_pages") : 0);
         bookBuilder.publisher((String) ((List)body.get("publishers")).get(0));
@@ -101,12 +101,24 @@ public class ISBNservice {
         return Optional.of(bookBuilder.build());
     }
 
-    private String getAuthors(List<Map<String,String>> authors) {
-        if (authors==null) {
+    private String getAuthors(Map body) {
+        Object works = body.get("works");
+        if (works==null || ((List)works).isEmpty()) {
             return "";
         }
 
-        return authors.stream()
+        String worksKey = (String) ((Map)((List)works).get(0)).get("key");
+
+        Map worksValues = restTemplate.getForObject("https://openlibrary.org"+worksKey+".json", Map.class);
+        Object authors = worksValues.get("authors");
+        if (authors==null || ((List)authors).isEmpty()) {
+            return "";
+        }
+
+        List authorsList = (List)authors;
+
+        return (String) authorsList.stream()
+                .map(o->((Map)o).get("author"))
                 .map(o->((Map)o).get("key"))
                 .map(path->"https://openlibrary.org"+(String)path+".json")
                 .map(link->restTemplate.getForObject((String) link, Map.class))
