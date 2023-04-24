@@ -19,10 +19,10 @@
     <a href="/account/reader" th:if="${role=='READER'}">Reader account</a><br>
     <a href="/account/librarian" th:if="${role=='LIBRARIAN'}">Librarian account</a><br>
     <br>
-    <!--    TODO на страницу с выбором создать руками (с загрузкой обложки) или загрузить с онлайна. -->
+    <a href="/isbn" th:if="${role=='ADMINISTRATOR'}">Fill book from ISBN database</a><br>
     <a href="/book/new" th:if="${role=='ADMINISTRATOR'}">Create new book</a><br>
     <br>
-    <a href="/user/new">Registration</a><br>
+    <a href="/user/new" th:if="${role==null}">Registration</a><br>
     <a href="/login" th:if="${role==null}">Login</a><br>
     <a href="/logout" th:if="${role}">Logout</a><br>
     <a href="/user/admin" th:if="${role=='ADMINISTRATOR'}">User management</a><br>

@@ -31,12 +31,17 @@ public class ISBNservice {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public static boolean isCorrect(String isbn) {
+        isbn = prepareISBN(isbn);
+        if (isbn.length()!=10 && isbn.length()!=13) {
+            return false;
+        }
+
     //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BD%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9_%D0%BD%D0%BE%D0%BC%D0%B5%D1%80
         //TODO реализовать проверку по формату 10 и 13 символов   "978"+10
         return true;
     }
 
-    private String prepareISBN(String ISBN) {
+    private static String prepareISBN(String ISBN) {
         return ISBN.replaceAll("\\D","");
     }
 
@@ -87,9 +92,9 @@ public class ISBNservice {
         Map body = entity.getBody();
         Book.BookBuilder bookBuilder = Book.builder();
         bookBuilder.ISBN((String) ((List)body.get("isbn_13")).get(0));
-        bookBuilder.author(getAuthors((List)body.get("authors")));
+        bookBuilder.author(getAuthors((List)body.get("authors")));  //переехал /works и там искать
         bookBuilder.title((String) body.get("title"));
-        bookBuilder.pages((Integer)body.get("number_of_pages"));
+        bookBuilder.pages(body.get("number_of_pages")!= null ? (Integer)body.get("number_of_pages") : 0);
         bookBuilder.publisher((String) ((List)body.get("publishers")).get(0));
         bookBuilder.dateOfPublication(getDate((String)body.get("publish_date")));
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ISBN</title>
+</head>
+<body>
+    <!--  TODO ТУТ СТРОКА ДЛЯ ВВОДА ISBN и показ ошибок если они есть.-->
+    <form method="post" action="/isbn">
+        <label for="isbn">ISBN: </label><input type="text" id="isbn" name="isbn" th:value="${isbn}"/>
+            <span style="color: red" th:if="${error}" th:text="${error}">error</span>
+            <br>
+            <br>
+        <input type="submit" value="Get"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+    <br>
+    <input type="button" onclick="location.href='/';" value="Cancel" />
+</body>
+</html>

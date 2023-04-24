@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @Controller
 @RequestMapping("/book")
@@ -29,19 +32,31 @@ public class BookController {
 
     @GetMapping("/{id}/edit")
     public String getEditBookPage(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("book", bookService.getById(id));
+        Book book =  bookService.getById(id);
+        model.addAttribute("book", book);
+        if (book.getImagePath()!=null && !book.getImagePath().isBlank()) {
+            model.addAttribute("internalImageBase64", bookService.getBase64Cover(book));
+        }
 
         return "BookEdit";
     }
 
-    @PostMapping
-    public String saveBook(@ModelAttribute @Valid Book book, Errors errors) {
+    @PostMapping("/new")
+    public String saveBook(@ModelAttribute @Valid Book book, Errors errors,
+                           @ModelAttribute("externalCoverUrl") String externalCoverUrl,
+                           @RequestParam("uploadCoverImage") MultipartFile multipartFile) {
         bookUniqValidator.validate(book, errors);
         if (errors.hasErrors()) {
             return "BookEdit";
         }
 
         bookService.save(book);
+
+        if (!multipartFile.isEmpty()) {
+            bookService.setMultipartFileAsCoverImage(book, multipartFile);
+        } else if (!externalCoverUrl.isBlank()) {
+            bookService.setExternalFileAsCoverImage(book, externalCoverUrl);
+        }
 
         return "redirect:/catalog";
     }

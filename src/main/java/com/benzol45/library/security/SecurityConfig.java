@@ -24,10 +24,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests()
-                    .requestMatchers("/", "/catalog", "/book/*/info", "/user/new","/book/*", "/access_denied").permitAll()
+                    .requestMatchers("/", "/catalog", "/book/*/info", "/user/new", "/access_denied").permitAll()
                     .requestMatchers("/account/reader", "/book_order/*", "/order_cancel/*").hasRole("READER")
                     .requestMatchers("/account/librarian", "/book_give/**", "/book_return/*", "/book_return_with_fine/*").hasRole("LIBRARIAN")
-                    .requestMatchers("/user/**", "/book/**").hasRole("ADMINISTRATOR")
+                    .requestMatchers("/user/**", "/book/**", "/isbn/**").hasRole("ADMINISTRATOR")
                     .anyRequest().denyAll().and()
                 .exceptionHandling()
                     .accessDeniedPage("/access_denied").and()
