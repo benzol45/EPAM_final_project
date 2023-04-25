@@ -42,7 +42,7 @@
             <th id="give" th:if="${role=='LIBRARIAN'}"></th>
         </tr>
             <tr th:each="book: ${books}">
-                <td th:text="${book.getTitle()}">title</td>
+                <td><a th:href="@{/book/{id}/info (id=${book.getId()})}" th:text="${book.getTitle()}">title</a></td>
                 <td th:text="${book.getAuthor()}">author</td>
                 <td th:text="${book.getPages()}">pages</td>
                 <td th:text="${book.getPublisher()}">publisher</td>

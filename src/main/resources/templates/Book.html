@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:if="${internalImageBase64}">
+        <img th:src="@{'data:image/jpg;base64,' + ${internalImageBase64}}">
+        <br>
+        <br>
+    </div>
+
+    <label for="isbn"><b>ISBN: </b></label> <span id="isbn" th:text="${book.getISBN()}"></span><br>
+
+    <label for="title"><b>Title: </b></label> <span id="title" th:text="${book.getTitle()}"></span><br>
+
+    <label for="author"><b>Author: </b></label> <span id="author" th:text="${book.getAuthor()}"></span><br>
+
+    <label for="pages"><b>Pages: </b></label> <span id="pages" th:text="${book.getPages()}"></span><br>
+
+    <label for="publisher"><b>Publisher: </b></label> <span id="publisher" th:text="${book.getPublisher()}"></span><br>
+
+    <label for="dateOfPublication"><b>Date of publication: </b></label> <span id="dateOfPublication" th:text="${book.getDateOfPublication()}"></span><br>
+
+    <label for="quantity"><b>Books copy in library: </b></label> <span id="quantity" th:text="${book.getQuantity()}"></span><br>
+    <br>
+
+    <a href="/catalog">Back to catalog</a>
+    <br>
+    <a href="/">Back to root page</a>
+
+</body>
+</html>

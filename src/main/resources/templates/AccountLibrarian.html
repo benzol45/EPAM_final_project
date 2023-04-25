@@ -27,7 +27,7 @@
             <td id="give"></td>
         </tr>
         <tr th:each="order: ${orders}">
-            <td th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</td>
+            <td><a th:href="@{/book/{id}/info (id=${order.getBook().getId()})}" th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</a></td>
             <td th:text="${order.getUser().getFullName()}">reader</td>
             <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
             <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}">give</a></td>
@@ -48,7 +48,7 @@
             <td>Fine</td>
         </tr>
         <tr th:each="givenBook: ${given_books}" th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
-            <td th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</td>
+            <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
             <td th:text="${givenBook.getUser().getFullName()}">reader</td>
             <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
             <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>

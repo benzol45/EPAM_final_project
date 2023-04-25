@@ -46,7 +46,7 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    @PreAuthorize("hasRole('LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('READER','LIBRARIAN')")
     public Order orderBook(Long bookId, Long userId) {
         //Книга есть и пользователь есть
         Optional<Book> optionalBook = bookRepository.findById(bookId);

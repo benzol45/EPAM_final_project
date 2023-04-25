@@ -25,6 +25,17 @@ public class BookController {
         this.bookUniqValidator = bookUniqValidator;
     }
 
+    @GetMapping("/{id}/info")
+    public String getBookInfoPage(@PathVariable("id") Long id, Model model) {
+        Book book =  bookService.getById(id);
+        model.addAttribute("book", book);
+        if (book.getImagePath()!=null && !book.getImagePath().isBlank()) {
+            model.addAttribute("internalImageBase64", bookService.getBase64Cover(book));
+        }
+
+        return "Book";
+    }
+
     @GetMapping("/new")
     public String getNewBookPage(@ModelAttribute Book book) {
         return "BookEdit";

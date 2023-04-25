@@ -27,7 +27,7 @@
         </tr>
         <div th:each="order: ${orders}">
             <tr>
-                <td th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</td>
+                <td><a th:href="@{/book/{id}/info (id=${order.getBook().getId()})}" th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</a></td>
                 <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
                 <td><a th:href="@{/order_cancel/{order_id} (order_id=${order.getId()})}">cancel</a></td>
             </tr>
@@ -47,7 +47,7 @@
         </tr>
         <div th:each="givenBook: ${given_books}">
             <tr th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
-                <td th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</td>
+                <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
                 <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
                 <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
                 <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
