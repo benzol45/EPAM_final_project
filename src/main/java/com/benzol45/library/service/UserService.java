@@ -22,6 +22,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public User getById(Long readerId) {
+        return userRepository.findById(readerId).orElseThrow(() -> new IllegalArgumentException("Can't find user with id " + readerId));
+    }
+
     public User saveNewUser(User user) {
         user.setLogin(user.getLogin().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));

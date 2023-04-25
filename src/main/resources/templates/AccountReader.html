@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Reader</title>
 
     <style>
         table, th, td {
@@ -15,21 +15,27 @@
     </style>
 </head>
 <body>
-<!--    TODO Информация о пользователе-->
-<br>
+    <h2>Reader</h2>
+    <big><big>
+    <div><label for="fullname"><b>Full name: </b></label> <span id="fullname" th:text="${reader.getFullName()}"></span></div>
+    <div><label for="contact"><b>Contact: </b></label> <span id="contact" th:text="${reader.getContact()}"></span></div>
+    <div sec:authorize="hasRole('READER')"><label for="login"><b>Login: </b></label> <span id="login" th:text="${reader.getLogin()}"></span></div>
+    <div><label for="language"><b>Language: </b></label> <span id="language" th:text="${reader.getLanguage()}"></span><br></div>
+    </big></big>
+    <br>
 
     <h2>Orders</h2>
     <table>
         <tr>
             <td>Book</td>
             <td>Create</td>
-            <td id="cancel"></td>
+            <td id="cancel" sec:authorize="hasRole('READER')"></td>
         </tr>
         <div th:each="order: ${orders}">
             <tr>
                 <td><a th:href="@{/book/{id}/info (id=${order.getBook().getId()})}" th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</a></td>
                 <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
-                <td><a th:href="@{/order_cancel/{order_id} (order_id=${order.getId()})}">cancel</a></td>
+                <td><a th:href="@{/order_cancel/{order_id} (order_id=${order.getId()})}" sec:authorize="hasRole('READER')">cancel</a></td>
             </tr>
         </div>
     </table>
@@ -55,5 +61,8 @@
             </tr>
         </div>
     </table>
+    <br>
+
+    <a href="#" onclick="history.go(-1)">Go Back</a>
 </body>
 </html>

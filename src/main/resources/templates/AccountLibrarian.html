@@ -15,7 +15,13 @@
     </style>
 </head>
 <body>
-<!--    TODO Информация о пользователе-->
+    <h2>Librarian</h2>
+    <big><big>
+        <div><label for="fullname"><b>Full name: </b></label> <span id="fullname" th:text="${librarian.getFullName()}"></span></div>
+        <div><label for="contact"><b>Contact: </b></label> <span id="contact" th:text="${librarian.getContact()}"></span></div>
+        <div><label for="login"><b>Login: </b></label> <span id="login" th:text="${librarian.getLogin()}"></span></div>
+        <div><label for="language"><b>Language: </b></label> <span id="language" th:text="${librarian.getLanguage()}"></span><br></div>
+    </big></big>
     <br>
 
     <h2>Readers orders</h2>
@@ -28,7 +34,7 @@
         </tr>
         <tr th:each="order: ${orders}">
             <td><a th:href="@{/book/{id}/info (id=${order.getBook().getId()})}" th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</a></td>
-            <td th:text="${order.getUser().getFullName()}">reader</td>
+            <td><a th:href="@{/reader/{id} (id=${order.getUser().getId()})}" th:text="${order.getUser().getFullName()}">reader</a></td>
             <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
             <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}">give</a></td>
         </tr>
@@ -49,7 +55,7 @@
         </tr>
         <tr th:each="givenBook: ${given_books}" th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
             <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
-            <td th:text="${givenBook.getUser().getFullName()}">reader</td>
+            <td><a th:href="@{/reader/{id} (id=${givenBook.getUser().getId()})}" th:text="${givenBook.getUser().getFullName()}">reader</a></td>
             <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
             <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
             <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
@@ -57,5 +63,8 @@
             <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
         </tr>
     </table>
+    <br>
+
+    <a href="#" onclick="history.go(-1)">Go Back</a>
 </body>
 </html>

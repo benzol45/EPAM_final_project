@@ -26,9 +26,6 @@
     <label for="quantity"><b>Books copy in library: </b></label> <span id="quantity" th:text="${book.getQuantity()}"></span><br>
     <br>
 
-    <a href="/catalog">Back to catalog</a>
-    <br>
-    <a href="/">Back to root page</a>
-
+    <a href="#" onclick="history.go(-1)">Go Back</a>
 </body>
 </html>

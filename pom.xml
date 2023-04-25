@@ -57,13 +57,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--        https://github.com/thymeleaf/thymeleaf-extras-springsecurity#using-the-attributes-->
-<!--        <dependency>         th:if="${!#authorization.expression('hasRole(''ADMINISTRATOR')')}"  это для страниц книг и людей может пригодиться -->
-<!--            <groupId>org.thymeleaf.extras</groupId>-->
-<!--            <artifactId>thymeleaf-extras-springsecurity5</artifactId>-->
-<!--            <version>3.0.4.RELEASE</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+            <version>3.1.1.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
