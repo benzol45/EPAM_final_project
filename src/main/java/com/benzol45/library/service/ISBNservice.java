@@ -17,8 +17,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//TODO Попробовать отсюда доставать https://isbnsearch.org/isbn/9780544003415 картинки обложки
-
 @Service
 @Slf4j
 public class ISBNservice {

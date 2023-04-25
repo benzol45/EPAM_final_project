@@ -5,7 +5,6 @@
     <title>ISBN</title>
 </head>
 <body>
-    <!--  TODO ТУТ СТРОКА ДЛЯ ВВОДА ISBN и показ ошибок если они есть.-->
     <form method="post" action="/isbn">
         <label for="isbn">ISBN: </label><input type="text" id="isbn" name="isbn" th:value="${isbn}"/>
             <span style="color: red" th:if="${error}" th:text="${error}">error</span>

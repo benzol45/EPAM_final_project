@@ -104,8 +104,8 @@ public class UserService {
 
     private void checkUserDetails(UserDetails userDetails) {
         if (!(userDetails instanceof User)) {
-            //TODO ЭТОГО БЫТЬ НЕ ДОЛЖНО. Откуда то взялся пользователь реализованный не нашим пользователем
-            //Логируем и вернём null или кидаем исключение ? правильнее - исклюение
+            //TODO log issue
+            throw new IllegalStateException("User and user parameters are incorrect");
         }
     }
 }
