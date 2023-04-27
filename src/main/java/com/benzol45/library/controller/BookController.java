@@ -1,36 +1,58 @@
 package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.Book;
+import com.benzol45.library.entity.GivenBook;
+import com.benzol45.library.entity.User;
 import com.benzol45.library.entity.validator.BookUniqValidator;
 import com.benzol45.library.service.BookService;
+import com.benzol45.library.service.GivingService;
+import com.benzol45.library.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/book")
 public class BookController {
     private final BookService bookService;
     private final BookUniqValidator bookUniqValidator;
+    private final UserService userService;
+    private final GivingService givingService;
 
     @Autowired
-    public BookController(BookService bookService, BookUniqValidator bookUniqValidator) {
+    public BookController(BookService bookService, BookUniqValidator bookUniqValidator, UserService userService, GivingService givingService) {
         this.bookService = bookService;
         this.bookUniqValidator = bookUniqValidator;
+        this.userService = userService;
+        this.givingService = givingService;
     }
 
     @GetMapping("/{id}/info")
-    public String getBookInfoPage(@PathVariable("id") Long id, Model model) {
+    public String getBookInfoPage(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
         Book book =  bookService.getById(id);
+        model.addAttribute("dateFormatter", DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"));
         model.addAttribute("book", book);
         if (book.getImagePath()!=null && !book.getImagePath().isBlank()) {
             model.addAttribute("internalImageBase64", bookService.getBase64Cover(book));
+        }
+
+        model.addAttribute("have_free_copy", givingService.canGiveBook(book));
+        model.addAttribute("date_free", givingService.getNextReturnDate(book));
+
+        if (userDetails!=null && userService.getRole(userDetails)== User.Role.LIBRARIAN) {
+            List<GivenBook> givenBooks = givingService.getAllByBook(book);
+            if (!givenBooks.isEmpty()) {
+                model.addAttribute("given_books", givenBooks);
+            }
         }
 
         return "Book";

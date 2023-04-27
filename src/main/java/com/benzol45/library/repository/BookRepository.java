@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    List<Book> findByISBN(String isbn);
+    List<Book> findByISBN(String ISBN);
     Page<Book> findAllByTitleContainsIgnoreCaseOrAuthorContainsIgnoreCase(String requestTitle, String requestAuthor, Pageable pageable);
 }

@@ -57,7 +57,7 @@
             <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
             <td><a th:href="@{/reader/{id} (id=${givenBook.getUser().getId()})}" th:text="${givenBook.getUser().getFullName()}">reader</a></td>
             <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
-            <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
+            <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">given date</td>
             <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
             <td><a th:href="@{/book_return/{given_book_id} (given_book_id=${givenBook.getId()})}">return</a></td>
             <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>

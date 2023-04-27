@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        table, th, td {
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
 <body>
     <div th:if="${internalImageBase64}">
@@ -25,6 +31,37 @@
 
     <label for="quantity"><b>Books copy in library: </b></label> <span id="quantity" th:text="${book.getQuantity()}"></span><br>
     <br>
+
+    <div th:if="${have_free_copy}">
+        <h3 style="color: darkgreen">Have a  copy now</h3>
+    </div>
+    <div th:if="${!have_free_copy}">
+        <h3 style="color: darkred">Have NOT a copy now</h3>
+        <div th:if="${date_free}">
+            <h3>Next return date:</h3> <h3 th:text="${date_free.format(dateFormatter)}">next_return_date</h3>
+        </div>
+    </div>
+    <br>
+
+
+    <div th:if="${given_books}">
+        <br>
+        <table>
+            <tr>
+                <th>Reader</th>
+                <th>Given date</th>
+                <th>in reading room</th>
+                <th>Return date</th>
+            </tr>
+            <tr th:each="givenBook: ${given_books}">
+                <td><a th:href="@{/reader/{id} (id=${givenBook.getUser().getId()})}" th:text="${givenBook.getUser().getFullName()}">reader</a></td>
+                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">given date</td>
+                <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
+                <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
+            </tr>
+        </table>
+        <br>
+    </div>
 
     <a href="#" onclick="history.go(-1)">Go Back</a>
 </body>

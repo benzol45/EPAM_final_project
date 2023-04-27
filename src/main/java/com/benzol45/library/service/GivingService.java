@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,11 @@ public class GivingService {
     @PreAuthorize("isAuthenticated()")
     public List<GivenBook> getAllByUserId(Long userId) {
         return givenBookRepository.findAllByUserId(userId, Sort.by("returnDate"));
+    }
+
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public List<GivenBook> getAllByBook(Book book) {
+        return givenBookRepository.findAllByBook(book, Sort.by("returnDate"));
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -113,5 +119,11 @@ public class GivingService {
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void returnBook(Long givenBookId) {
         givenBookRepository.deleteById(givenBookId);
+    }
+
+    public LocalDateTime getNextReturnDate(Book book) {
+        return givenBookRepository.findAllByBook(book, Sort.by("returnDate")).stream()
+                .map(GivenBook::getReturnDate)
+                .findFirst().orElse(null);
     }
 }

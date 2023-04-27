@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface GivenBookRepository extends JpaRepository<GivenBook, Long> {
     List<GivenBook> findAllByUserId(Long userId, Sort sort);
+    List<GivenBook> findAllByBook(Book book, Sort sort);
     int countAllByBook(Book book);
 }
