@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +23,15 @@ public class GivingService {
     private final UserRepository userRepository;
     private final GivenBookRepository givenBookRepository;
     private final OrderRepository orderRepository;
+    private final RatingService ratingService;
 
     @Autowired
-    public GivingService(BookRepository bookRepository, UserRepository userRepository, GivenBookRepository givenBookRepository, OrderRepository orderRepository) {
+    public GivingService(BookRepository bookRepository, UserRepository userRepository, GivenBookRepository givenBookRepository, OrderRepository orderRepository, RatingService ratingService) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
         this.givenBookRepository = givenBookRepository;
         this.orderRepository = orderRepository;
+        this.ratingService = ratingService;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -118,7 +119,18 @@ public class GivingService {
 
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void returnBook(Long givenBookId) {
+        createRatingRequest(givenBookId);
+
         givenBookRepository.deleteById(givenBookId);
+    }
+
+    private void createRatingRequest(Long givenBookId) {
+        Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
+        if (optionalGivenBook.isEmpty()) {
+            throw new IllegalArgumentException("Incorrect given book index " + givenBookId);
+        }
+        GivenBook givenBook = optionalGivenBook.get();
+        ratingService.createRatingRequest(givenBook.getUser(),givenBook.getBook());
     }
 
     public LocalDateTime getNextReturnDate(Book book) {

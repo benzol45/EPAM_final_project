@@ -126,4 +126,10 @@ public class BookService {
         }
         return folderForImages;
     }
+
+    @PreAuthorize("hasRole('READER')")
+    public void setRatingForBook(Book book, double rating) {
+        book.setRating(rating);
+        bookRepository.save(book);
+    }
 }

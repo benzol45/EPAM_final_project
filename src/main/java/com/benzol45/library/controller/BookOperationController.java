@@ -22,22 +22,31 @@ public class BookOperationController {
     private final OrderService orderService;
     private final GivingService givingService;
     private final FineService fineService;
+    private final RatingService ratingService;
 
 
     @Autowired
-    public BookOperationController(BookService bookService, OrderService orderService, UserService userService, GivingService givingService, FineService fineService) {
+    public BookOperationController(BookService bookService, OrderService orderService, UserService userService, GivingService givingService, FineService fineService, RatingService ratingService) {
         this.bookService = bookService;
         this.userService = userService;
         this.orderService = orderService;
         this.givingService = givingService;
         this.fineService = fineService;
+        this.ratingService = ratingService;
     }
 
     @GetMapping("/book_order/{id}")
-    public String orderBook(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        orderService.orderBook(id, userService.getUser(userDetails).getId());
+    public String orderBook(@PathVariable("id") Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
+        orderService.orderBook(bookId, userService.getUser(userDetails).getId());
 
         return "redirect:/catalog";
+    }
+
+    @PostMapping("/book_rate/{request_id}")
+    public String rateBook(@PathVariable("request_id") Long requestId, @RequestParam("rate") Integer rate, @AuthenticationPrincipal UserDetails userDetails) {
+        ratingService.setRating(userService.getUser(userDetails), requestId, rate);
+
+        return "redirect:/account/reader";
     }
 
     @GetMapping("/book_give/{id}")

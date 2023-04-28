@@ -53,4 +53,6 @@ public class Book {
 
     @Positive
     private int quantity;
+
+    private double rating;
 }

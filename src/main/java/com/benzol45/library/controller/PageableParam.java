@@ -29,15 +29,21 @@ public class PageableParam {
         }
 
         if (!correctSorting(this.sort)) {
-            //TODO логировать, возможно заменять на стандартное "по заголовку"
-            throw new IllegalStateException("Incorrect sorting " + sort);
+            //TODO непонятная сортировка пришла, логировать
+            //throw new IllegalStateException("Incorrect sorting " + sort);
+            sort ="title";
         }
 
-        return PageRequest.of(page,bookOnPage, Sort.by(sort));
+        Sort sortResult = Sort.by(sort);
+        if ("rating".equals(sort)) {
+            sortResult = sortResult.descending();
+        }
+
+        return PageRequest.of(page,bookOnPage, sortResult);
     }
 
     private boolean correctSorting(String sorting) {
-        List<String> correct = List.of("title","author","publisher","dateOfPublication");
+        List<String> correct = List.of("title","author","publisher","dateOfPublication","rating");
         return correct.contains(sorting);
     }
 }

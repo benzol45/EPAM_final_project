@@ -2,11 +2,8 @@ package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.Order;
-import com.benzol45.library.entity.User;
-import com.benzol45.library.service.FineService;
-import com.benzol45.library.service.GivingService;
-import com.benzol45.library.service.OrderService;
-import com.benzol45.library.service.UserService;
+import com.benzol45.library.entity.Rating;
+import com.benzol45.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -29,13 +25,15 @@ public class AccountController {
     private final GivingService givingService;
     private final FineService fineService;
     private final UserService userService;
+    private final RatingService ratingService;
 
     @Autowired
-    public AccountController(OrderService orderService, GivingService givingService, FineService fineService, UserService userService) {
+    public AccountController(OrderService orderService, GivingService givingService, FineService fineService, UserService userService, RatingService ratingService) {
         this.orderService = orderService;
         this.givingService = givingService;
         this.fineService = fineService;
         this.userService = userService;
+        this.ratingService = ratingService;
     }
 
     @ModelAttribute("dateFormatter")
@@ -73,6 +71,11 @@ public class AccountController {
         Long readerId = userService.getUser(userDetails).getId();
 
         model.addAllAttributes(prepareReaderModel(readerId));
+
+        List<Rating> ratingRequests = ratingService.getAllRatingRequestByUser(userService.getUser(userDetails));
+        if (!ratingRequests.isEmpty()) {
+            model.addAttribute("rating_requests",ratingRequests);
+        }
 
         return "AccountReader";
     }

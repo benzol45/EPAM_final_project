@@ -55,13 +55,37 @@
             <tr th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
                 <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
                 <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
-                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">return date</td>
+                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">given date</td>
                 <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
                 <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
             </tr>
         </div>
     </table>
     <br>
+
+    <div sec:authorize="hasRole('READER')" th:if="${rating_requests}">
+        <h3>Please rate books, which you read</h3>
+        <table>
+            <tr>
+                <th>Book</th>
+                <th>Return date</th>
+                <th>Your rate [0-10]</th>
+            </tr>
+            <tr th:each="request: ${rating_requests}">
+                <td><a th:href="@{/book/{id}/info (id=${request.getBook().getId()})}" th:text="${request.getBook().getTitle() + ' (' + request.getBook().getAuthor() + ')'}">book</a></td>
+                <td th:text="${request.getCreateDate().format(dateFormatter)}">return date</td>
+
+                <td>
+                    <form method="post" th:action="@{/book_rate/{request_id} (request_id=${request.getId()})}">
+                        <input type="number" name="rate" min="0" max="10">
+                        <input type="submit" value="Send">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
 
     <a href="#" onclick="history.go(-1)">Go Back</a>
 </body>
