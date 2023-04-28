@@ -28,9 +28,6 @@ public class User implements UserDetails {
 
     private String contact;
 
-    @Enumerated(EnumType.STRING) //default in SQL = EN
-    private Language language;
-
     @NotNull
     @NotBlank
     private String login;
@@ -73,10 +70,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return (this.role!=null && this.role!=Role.NA);
-    }
-
-    public enum Language {
-        RU, EN
     }
 
     public enum Role {

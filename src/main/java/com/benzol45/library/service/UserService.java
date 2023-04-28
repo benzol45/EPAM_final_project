@@ -29,7 +29,6 @@ public class UserService {
     public User saveNewUser(User user) {
         user.setLogin(user.getLogin().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setLanguage(User.Language.EN);
         user.setBlocked(true);
         user.setRole(User.Role.NA);
 

@@ -13,13 +13,7 @@ public class LibraryApplication {
         SpringApplication.run(LibraryApplication.class, args);
     }
 
-    //TODO перенести в отдельный конфиг
-    @Bean
-    public RestTemplate restTemplate() {
-        return (new RestTemplateBuilder()).build();
-    }
-
-    //Мультиязык
+    //Мультиязык   https://youtu.be/5gdslS6AaiE?t=1120
     //Покрытие тестами
     //актуатор, метрики
     // Какие книги больше всго раз брали, какие дольще всего ждали, какие наибольший рейтинг, какие наименьший
