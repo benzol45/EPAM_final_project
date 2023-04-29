@@ -1,18 +1,18 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Give book</title>
+    <title th:text="#{bookGive.title}">Give book</title>
 </head>
 <body>
     <form method="post" action="/book_give">
         <input type="hidden" name="order_id" th:value="${orderId}"/>
         <input type="hidden" name="book_id" th:value="${book.getId()}"/>
-        <label for="book_title">Book </label><input type="text" size="128" id="book_title" name="book_title" th:value="${book.getTitle() + ' (' + book.getAuthor() + ')'}"/>
+        <label for="book_title" th:text="#{bookGive.book}">Book </label><input type="text" size="128" id="book_title" name="book_title" th:value="${book.getTitle() + ' (' + book.getAuthor() + ')'}"/>
         <br>
         <br>
 
-        <label for="reader">Reader </label>
+        <label for="reader" th:text="#{bookGive.reader}">Reader </label>
         <select id="reader" name="reader_id">
             <div th:each="reader: ${readers}">
                 <option th:value="${reader.getId()}" th:text="${reader.getFullName()}" th:selected="${reader.getId().equals(selectedReaderId)}">reader</option>>
@@ -21,15 +21,15 @@
         <br>
         <br>
 
-        <label for="checkbox">to reading room</label> <input type="checkbox" id="checkbox" name="to_reading_room">
+        <label for="checkbox" th:text="#{bookGive.readingRoom}">to reading room</label> <input type="checkbox" id="checkbox" name="to_reading_room">
         <br>
         <br>
 
-        <label for="time">Return: </label> <input type="datetime-local" id="time" name="return_date">
+        <label for="time" th:text="#{bookGive.return}">Return: </label> <input type="datetime-local" id="time" name="return_date">
         <br>
         <br>
 
-        <input type="submit" value="Issue">
+        <input type="submit" th:value="#{bookGive.button}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </form>
 

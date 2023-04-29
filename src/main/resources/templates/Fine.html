@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Fine</title>
+    <title th:text="#{fine.title}">Fine</title>
 </head>
 <body>
     <h2><pre th:text="${message}"></pre></h2>
     <br>
-    <h1>The fine: <span style="color: red" th:text="${fain}">fain</span></h1>
+    <h1><span th:text="#{fine.fineLabel}">The fine: </span>><span style="color: red" th:text="${fain}">fain</span></h1>
     <br>
     <br>
     <form th:action="@{/book_return_with_fine/{given_book_id} (given_book_id=${givenBook.getId()})}" method="get">
-        <input type="submit" value="Return book with fine">
+        <input type="submit" th:value="#{fine.fineButton}">
     </form>
     <br>
-    <input type="button" onclick="location.href='/account/librarian';" value="Cancel" />
+    <input type="button" onclick="location.href='/account/librarian';" th:value="#{fine.cancelButton}" />
 
 </body>
 </html>

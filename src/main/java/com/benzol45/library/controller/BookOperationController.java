@@ -71,6 +71,7 @@ public class BookOperationController {
                            @RequestParam(value = "order_id", required = false) Long orderId,
                            @RequestParam(value = "to_reading_room", defaultValue = "false") Boolean toReadingRoom,
                            @RequestParam("return_date") LocalDateTime returnDate) {
+        //TODO проверить дату выдачи
 
         if (givingService.canGiveBookById(bookId)) {
             givingService.giveBook(bookId, readerId, orderId, toReadingRoom, returnDate);

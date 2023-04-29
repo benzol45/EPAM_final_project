@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${book.getTitle()}">book title</title>
     <style>
         table, th, td {
             border: 1px solid gray;
@@ -19,28 +19,28 @@
 
     <label for="isbn"><b>ISBN: </b></label> <span id="isbn" th:text="${book.getISBN()}"></span><br>
 
-    <label for="title"><b>Title: </b></label> <span id="title" th:text="${book.getTitle()}"></span><br>
+    <label for="title"><b th:text="#{book.page.title}">Title: </b></label> <span id="title" th:text="${book.getTitle()}"></span><br>
 
-    <label for="author"><b>Author: </b></label> <span id="author" th:text="${book.getAuthor()}"></span><br>
+    <label for="author"><b th:text="#{book.page.author}">Author: </b></label> <span id="author" th:text="${book.getAuthor()}"></span><br>
 
-    <label for="rating"><b>Rating (0-10): </b></label> <span id="rating" th:text="${book.getRating()}"></span><br>
+    <label for="rating"><b th:text="#{book.page.rating}">Rating (0-10): </b></label> <span id="rating" th:text="${book.getRating()}"></span><br>
 
-    <label for="pages"><b>Pages: </b></label> <span id="pages" th:text="${book.getPages()}"></span><br>
+    <label for="pages"><b th:text="#{book.page.pages}">Pages: </b></label> <span id="pages" th:text="${book.getPages()}"></span><br>
 
-    <label for="publisher"><b>Publisher: </b></label> <span id="publisher" th:text="${book.getPublisher()}"></span><br>
+    <label for="publisher"><b th:text="#{book.page.publisher}">Publisher: </b></label> <span id="publisher" th:text="${book.getPublisher()}"></span><br>
 
-    <label for="dateOfPublication"><b>Date of publication: </b></label> <span id="dateOfPublication" th:text="${book.getDateOfPublication()}"></span><br>
+    <label for="dateOfPublication"><b th:text="#{book.page.publicationDate}">Date of publication: </b></label> <span id="dateOfPublication" th:text="${book.getDateOfPublication()}"></span><br>
 
-    <label for="quantity"><b>Books copy in library: </b></label> <span id="quantity" th:text="${book.getQuantity()}"></span><br>
+    <label for="quantity"><b th:text="#{book.page.quantity}">Books copy in library: </b></label> <span id="quantity" th:text="${book.getQuantity()}"></span><br>
     <br>
 
     <div th:if="${have_free_copy}">
-        <h3 style="color: darkgreen">Have a  copy now</h3>
+        <h3 style="color: darkgreen" th:text="#{book.page.haveCopy}">Have a copy now</h3>
     </div>
     <div th:if="${!have_free_copy}">
-        <h3 style="color: darkred">Have NOT a copy now</h3>
+        <h3 style="color: darkred" th:text="#{book.page.haveNotCopy}">Have NOT a copy now</h3>
         <div th:if="${date_free}">
-            <h3>Next return date:</h3> <h3 th:text="${date_free.format(dateFormatter)}">next_return_date</h3>
+            <h3 th:text="#{book.page.returnDate}">Next return date:</h3> <h3 th:text="${date_free.format(dateFormatter)}">next_return_date</h3>
         </div>
     </div>
     <br>
@@ -50,21 +50,21 @@
         <br>
         <table>
             <tr>
-                <th>Reader</th>
-                <th>Given date</th>
-                <th>in reading room</th>
-                <th>Return date</th>
+                <th th:text="#{book.table.reader}">Reader</th>
+                <th th:text="#{book.table.givenDate}">Given date</th>
+                <th th:text="#{book.table.inReadingRoom}">in reading room</th>
+                <th th:text="#{book.table.returnDate}">Return date</th>
             </tr>
             <tr th:each="givenBook: ${given_books}">
                 <td><a th:href="@{/reader/{id} (id=${givenBook.getUser().getId()})}" th:text="${givenBook.getUser().getFullName()}">reader</a></td>
                 <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">given date</td>
-                <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
+                <td th:text="${givenBook.isInReadingRoom() ? 'V' : ''}" align="center">reading room</td>
                 <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
             </tr>
         </table>
         <br>
     </div>
 
-    <a href="#" onclick="history.go(-1)">Go Back</a>
+    <a href="#" onclick="history.go(-1)" th:text="#{book.page.backButton}">Go Back</a>
 </body>
 </html>
