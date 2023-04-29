@@ -47,16 +47,22 @@ public class I18nConfig implements WebMvcConfigurer {
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames(
-                "messages/root",
-                "messages/error",
-                "messages/fineService",
+                "messages/accountLibrarian",
+                "messages/accountReader",
+                "messages/book",
                 "messages/bookCatalog",
                 "messages/bookEdit",
-                "messages/validatorMessage",
-                "messages/book",
+                "messages/bookGive",
+                "messages/error",
                 "messages/fine",
+                "messages/fineService",
                 "messages/isbn",
-                "messages/bookGive");
+                "messages/login",
+                "messages/newUser",
+                "messages/root",
+                "messages/userAdministration",
+                "messages/validatorMessage"
+                );
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

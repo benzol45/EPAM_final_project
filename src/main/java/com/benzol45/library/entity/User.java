@@ -16,7 +16,6 @@ import java.util.Locale;
 @Data
 @Entity
 @Table(name = "users")
-//TODO нужно ли хранить язык для пользователя
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

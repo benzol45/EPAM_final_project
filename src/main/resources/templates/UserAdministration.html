@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Users administration</title>
-
+    <title th:text="#{userAdmin.title}">Users administration</title>
     <style>
         table, th, td {
             border: 1px solid gray;
@@ -12,11 +11,11 @@
     </style>
 </head>
 <body>
-    <h2>Need to set ROLE</h2>
+    <h2 th:text="#{userAdmin.needRole}">Need to set ROLE</h2>
     <table>
         <tr>
-            <th>login</th>
-            <th>full name</th>
+            <th th:text="#{userAdmin.login}">login</th>
+            <th th:text="#{userAdmin.fullName}">full name</th>
             <th></th>
             <th></th>
             <th></th>
@@ -25,21 +24,21 @@
             <tr>
                 <td th:text="${user.getLogin()}">login</td>
                 <td th:text="${user.getFullName()}">full name</td>
-                <td><a th:href="@{/user/{id}/set/reader (id=${user.getId()})}">set role "reader"</a></td>
-                <td><a th:href="@{/user/{id}/set/librarian (id=${user.getId()})}">set role "librarian"</a></td>
-                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}">DELETE account</a></td>
+                <td><a th:href="@{/user/{id}/set/reader (id=${user.getId()})}" th:text="#{userAdmin.setReader}">set role "reader"</a></td>
+                <td><a th:href="@{/user/{id}/set/librarian (id=${user.getId()})}" th:text="#{userAdmin.setLibrarian}">set role "librarian"</a></td>
+                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}" th:text="#{userAdmin.deleteUser}">DELETE account</a></td>
             </tr>
         </div>
     </table>
 
     <br>
     <br>
-    <h2>Blocked</h2>
+    <h2 th:text="#{userAdmin.blocked}">Blocked</h2>
     <table>
         <tr>
-            <th>login</th>
-            <th>full name</th>
-            <th>role</th>
+            <th th:text="#{userAdmin.login}">login</th>
+            <th th:text="#{userAdmin.fullName}">full name</th>
+            <th th:text="#{userAdmin.role}">role</th>
             <th></th>
             <th></th>
         </tr>
@@ -48,20 +47,20 @@
                 <td th:text="${user.getLogin()}">login</td>
                 <td th:text="${user.getFullName()}">full name</td>
                 <td th:text="${user.getRole()}">role</td>
-                <td><a th:href="@{/user/{id}/unblock (id=${user.getId()})}">unblock</a></td>
-                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}">DELETE account</a></td>
+                <td><a th:href="@{/user/{id}/unblock (id=${user.getId()})}" th:text="#{userAdmin.unblock}">unblock</a></td>
+                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}" th:text="#{userAdmin.deleteUser}">DELETE account</a></td>
             </tr>
         </div>
     </table>
 
     <br>
     <br>
-    <h2>Active users</h2>
+    <h2 th:text="#{userAdmin.activeUser}">Active users</h2>
     <table>
         <tr>
-            <th>login</th>
-            <th>full name</th>
-            <th>role</th>
+            <th th:text="#{userAdmin.login}">login</th>
+            <th th:text="#{userAdmin.fullName}">full name</th>
+            <th th:text="#{userAdmin.role}">role</th>
             <th></th>
             <th></th>
         </tr>
@@ -70,8 +69,8 @@
                 <td th:text="${user.getLogin()}">login</td>
                 <td th:text="${user.getFullName()}">full name</td>
                 <td th:text="${user.getRole()}">role</td>
-                <td><a th:href="@{/user/{id}/block (id=${user.getId()})}">block</a></td>
-                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}">DELETE account</a></td>
+                <td><a th:href="@{/user/{id}/block (id=${user.getId()})}" th:text="#{userAdmin.block}">block</a></td>
+                <td><a th:href="@{/user/{id}/delete (id=${user.getId()})}" th:text="#{userAdmin.deleteUser}">DELETE account</a></td>
             </tr>
         </div>
     </table>
