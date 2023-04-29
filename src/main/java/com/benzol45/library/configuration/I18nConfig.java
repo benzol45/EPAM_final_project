@@ -10,7 +10,12 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.time.Duration;
-import java.util.Locale;
+
+//Курс Марселя от Maxima занятие 30
+//Три вариант работы с сообщениями
+// - в шаблоне th:text="#{ИмяСвойстваИзНабораСообщений}", например в root.html
+// - в коде. Locale locale = LocaleContextHolder.getLocale(); @Autowired MessageSource messageSource; messageSource.getMessage("ИмяСвойстваИзНабораСообщений",null,locale); пример в FineService
+// - сообщения валидатора. В наборе ресурсов указывается код ошибки любого нужного уровня (видно в BindingResult у каждой ошибки в кодах), например в validatorMessage_en.properties
 
 @Configuration
 public class I18nConfig implements WebMvcConfigurer {
@@ -41,7 +46,7 @@ public class I18nConfig implements WebMvcConfigurer {
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasenames("messages/root","messages/fineService","messages/bookCatalog");
+        messageSource.setBasenames("messages/root", "messages/fineService", "messages/bookCatalog", "messages/bookEdit", "messages/validatorMessage");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

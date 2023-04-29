@@ -74,7 +74,7 @@ public class BookController {
         return "BookEdit";
     }
 
-    @PostMapping("/new")
+    @PostMapping("/save")
     public String saveBook(@ModelAttribute @Valid Book book, Errors errors,
                            @ModelAttribute("externalCoverUrl") String externalCoverUrl,
                            @RequestParam("uploadCoverImage") MultipartFile multipartFile) {
