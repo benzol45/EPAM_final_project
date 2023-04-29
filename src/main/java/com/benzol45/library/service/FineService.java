@@ -2,6 +2,8 @@ package com.benzol45.library.service;
 
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.property.PropertyHolder;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +13,19 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 @Service
 public class FineService {
+    private final MessageSource messageSource;
+    private final PropertyHolder propertyHolder;
     private final int hourFain;
     private final int dayFain;
-    private final PropertyHolder propertyHolder;
 
-    public FineService(PropertyHolder propertyHolder) {
+
+
+    public FineService(MessageSource messageSource, PropertyHolder propertyHolder) {
+        this.messageSource = messageSource;
         this.propertyHolder = propertyHolder;
         this.hourFain = propertyHolder.getFineForHourInReadingRoom();
         this.dayFain = propertyHolder.getFineForDayOnSubscription();
@@ -54,9 +61,9 @@ public class FineService {
     }
 
     @PreAuthorize("isAuthenticated()")
-    public String explainFine(GivenBook givenBook) {
+    public String explainFine(GivenBook givenBook, Locale locale) {
         if (!haveFine(givenBook)) {
-            return "No fine";
+            return getLocaleMessage("noFine", locale);
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -80,6 +87,10 @@ public class FineService {
                 .append(" = ").append(calculateFineForGivenBook(givenBook));
 
         return stringBuilder.toString();
+    }
+
+    private String getLocaleMessage(String key, Locale locale) {
+        return messageSource.getMessage("fineService."+key,null,locale);
     }
 
 

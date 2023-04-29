@@ -20,7 +20,7 @@ class FineServiceTest {
         PropertyHolder propertyHolder = new PropertyHolder();
         propertyHolder.setFineForHourInReadingRoom(hourFine.intValue());
         propertyHolder.setFineForDayOnSubscription(dayFine.intValue());
-        fineService = new FineService(propertyHolder);
+        fineService = new FineService(null,propertyHolder);
     }
 
     @Test

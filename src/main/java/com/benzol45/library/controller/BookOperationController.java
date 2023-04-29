@@ -4,6 +4,7 @@ import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.User;
 import com.benzol45.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Controller
 public class BookOperationController {
@@ -89,7 +91,7 @@ public class BookOperationController {
         long fine = fineService.calculateFineForGivenBook(givenBook);
 
         if (fine>0) {
-            model.addAttribute("message", fineService.explainFine(givenBook));
+            model.addAttribute("message", fineService.explainFine(givenBook, LocaleContextHolder.getLocale()));
             model.addAttribute("fain",fine);
             model.addAttribute("givenBook", givenBook);
             return "Fine";

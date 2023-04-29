@@ -8,7 +8,7 @@
     <h1 th:text="#{root.page.title}">Library</h1>
     <br>
     <h2 th:text="#{root.page.line1}">Library is open from 9AM to 7PM all days except Sunday</h2>
-    <h3>You can take books to the reading room for 4 hours but only before library closing (7PM)</h3>
+    <h3 th:text="#{root.page.line2}">You can take books to the reading room for 4 hours but only before library closing (7PM)</h3>
     <h3>You can take books on a subscription for 5 days. You must return books before library closing (7PM) on fifth day, and if it's Sunday - before closing in Monday</h3>
     <h3>If you can't return books on time the fine is <span th:text="${hour_fine}">hour fine</span> for one hour in reading room and <span th:text="${day_fine}">day fine</span> on the subscription.</h3>
     <br>
