@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Error</title>
+    <title th:text="#{exception.title}">Error</title>
 </head>
 <body>
-    <h2>Sorry, it's incorrect situation</h2>
-    <a href="/">Return</a>
+    <h2 th:text="#{exception.message}">Sorry, it's incorrect situation</h2>
+    <a href="/" th:text="#{exception.button}">Return</a>
     <br>
-    <h3>Please report this information to the administrator:</h3>
+    <h3 th:text="#{exception.messageFooter}">Please report this information to the administrator:</h3>
     <div>URL: <span th:text="${url}"></span></div>
     <div>Error: <span th:text="${exceptionClass}"></span></div>
     <div>Description: <span th:text="${exceptionMessage}"></span></div>

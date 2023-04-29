@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests()
-                    .requestMatchers("/", "/catalog", "/book/*/info", "/access_denied").permitAll()
+                    .requestMatchers("/", "/catalog", "/book/*/info", "/user/new", "/access_denied").permitAll()
                     .requestMatchers("/account/reader", "/book_order/*", "/book_rate/*", "/order_cancel/*").hasRole("READER")
                     .requestMatchers("/account/librarian", "/reader/**", "/book_give/**", "/book_return/*", "/book_return_with_fine/*").hasRole("LIBRARIAN")
                     .requestMatchers("/user/**", "/book/**", "/isbn/**").hasRole("ADMINISTRATOR")

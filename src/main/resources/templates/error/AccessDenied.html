@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Access denied</title>
+    <title th:text="#{accessDenied.title}">Access denied</title>
 </head>
 <body>
-    <h2>Sorry, you don't have permission to access this page</h2>
-    <a href="/">Return</a>
+    <h2 th:text="#{accessDenied.message}">Sorry, you don't have permission to access this page</h2>
+    <a href="/" th:text="#{accessDenied.button}">Return</a>
 </body>
 </html>
