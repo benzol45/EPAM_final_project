@@ -1,5 +1,6 @@
 package com.benzol45.library.service;
 
+import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ import java.util.UUID;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final Metrics metrics;
 
     @Autowired
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository, Metrics metrics) {
         this.bookRepository = bookRepository;
+        this.metrics = metrics;
     }
 
     public List<Book> getAll() {
@@ -75,12 +78,15 @@ public class BookService {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Book save(Book book) {
-        return bookRepository.save(book);
+        bookRepository.save(book);
+        metrics.refreshBookCopyCounter();
+        return book;
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
+        metrics.refreshBookCopyCounter();
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")

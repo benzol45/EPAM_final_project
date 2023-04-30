@@ -1,5 +1,6 @@
 package com.benzol45.library.service;
 
+import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.User;
 import com.benzol45.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,13 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Metrics metrics;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, Metrics metrics) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.metrics = metrics;
     }
 
     public User getById(Long readerId) {
@@ -61,7 +64,9 @@ public class UserService {
         if (current.isPresent()) {
             User user = current.get();
             user.setRole(role);
-            return userRepository.save(user);
+            userRepository.save(user);
+            metrics.refreshReaderCounter();
+            return user;
         } else {
             return null;
         }
@@ -70,6 +75,7 @@ public class UserService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+        metrics.refreshReaderCounter();
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")

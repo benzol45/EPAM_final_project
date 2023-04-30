@@ -15,4 +15,6 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     List<User> findAllByIsBlockedIsTrueAndRoleIsNotOrderByLogin(User.Role role);
     List<User> findAllByIsBlockedIsFalseAndRoleIsNotOrderByRoleAscLoginAsc(User.Role role);
     List<User> findAllByIsBlockedIsFalseAndRoleIsOrderByFullNameAsc(User.Role role);
+
+    Integer countAllByRoleAndIsBlockedIsFalse(User.Role role);
 }

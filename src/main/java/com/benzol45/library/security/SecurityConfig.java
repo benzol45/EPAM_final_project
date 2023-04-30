@@ -27,7 +27,7 @@ public class SecurityConfig {
                     .requestMatchers("/", "/catalog", "/book/*/info", "/user/new", "/access_denied").permitAll()
                     .requestMatchers("/account/reader", "/book_order/*", "/book_rate/*", "/order_cancel/*").hasRole("READER")
                     .requestMatchers("/account/librarian", "/reader/**", "/book_give/**", "/book_return/*", "/book_return_with_fine/*").hasRole("LIBRARIAN")
-                    .requestMatchers("/user/**", "/book/**", "/isbn/**").hasRole("ADMINISTRATOR")
+                    .requestMatchers("/user/**", "/book/**", "/isbn/**", "/actuator/**").hasRole("ADMINISTRATOR")
                     .anyRequest().denyAll().and()
                 .exceptionHandling()
                     .accessDeniedPage("/access_denied").and()
@@ -41,6 +41,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                     .permitAll().and()
+                .httpBasic().and()
                 .build();
     }
 }
