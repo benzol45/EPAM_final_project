@@ -51,7 +51,6 @@ public class CatalogController {
             model.addAttribute("role", userService.getRole(userDetails).toString());
         }
         return "BookCatalog";
-        //TODO подобрать ширину столбцов в процентах от экрана
     }
 
 

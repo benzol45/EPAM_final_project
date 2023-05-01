@@ -100,6 +100,4 @@ public class BookController {
 
         return "redirect:/catalog";
     }
-
-    //TODO add GET /book/{id}/info for book information
 }

@@ -3,17 +3,18 @@ package com.benzol45.library.controller;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.ApplicationContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
-//https://www.baeldung.com/spring-data-jpa-pagination-sorting
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
+//https://www.baeldung.com/spring-data-jpa-pagination-sorting
 public class PageableParam {
     private int page;
     private int bookOnPage;
@@ -29,7 +30,7 @@ public class PageableParam {
         }
 
         if (!correctSorting(this.sort)) {
-            //TODO непонятная сортировка пришла, логировать
+            log.debug("Incorrect sorting " + sort);
             //throw new IllegalStateException("Incorrect sorting " + sort);
             sort ="title";
         }

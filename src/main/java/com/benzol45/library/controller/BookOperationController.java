@@ -71,7 +71,7 @@ public class BookOperationController {
                            @RequestParam(value = "order_id", required = false) Long orderId,
                            @RequestParam(value = "to_reading_room", defaultValue = "false") Boolean toReadingRoom,
                            @RequestParam("return_date") LocalDateTime returnDate) {
-        //TODO проверить дату выдачи
+        //TODO проверить дату выдачи, дату возврата
 
         if (givingService.canGiveBookById(bookId)) {
             givingService.giveBook(bookId, readerId, orderId, toReadingRoom, returnDate);
@@ -81,8 +81,7 @@ public class BookOperationController {
                 return "redirect:/catalog";
             }
         } else {
-            //TODO не можем выдать, ошибку показать
-            return null;
+            throw new IllegalStateException("Can't give book. Don't have free copies");
         }
     }
 
@@ -104,8 +103,9 @@ public class BookOperationController {
 
     @GetMapping("/book_return_with_fine/{given_book_id}")
     public String returnBookWithFine(@PathVariable("given_book_id") Long givenBookId) {
-        //TODO залогировать что взяли штраф ? или записать в какую базу ?
+        fineService.getFine(givingService.getById(givenBookId));
         givingService.returnBook(givenBookId);
+
         return "redirect:/account/librarian";
     }
 

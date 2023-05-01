@@ -7,6 +7,7 @@ import com.benzol45.library.repository.BookRepository;
 import com.benzol45.library.repository.GivenBookRepository;
 import com.benzol45.library.repository.OrderRepository;
 import com.benzol45.library.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class GivingService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -48,8 +50,7 @@ public class GivingService {
     public GivenBook getById(Long givenBookId) {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {
-            //TODO log issue
-            //TODO поймать это исключение
+            log.debug("Can't find the given book by id " + givenBookId);
             throw new IllegalStateException("Can't find the given book by id " + givenBookId);
         }
 
@@ -63,7 +64,7 @@ public class GivingService {
 
     public boolean canGiveBookById(Long bookId) {
         if (bookId==null || bookRepository.findById(bookId).isEmpty()) {
-            //TODO log issue
+            log.debug("Can't find a book by id " + bookId);
             return false;
         }
 
@@ -73,7 +74,7 @@ public class GivingService {
 
     public boolean canGiveBook(Book book) {
         if (book==null) {
-            //TODO log issue
+            log.debug("For checking 'canGive' send null as book reference");
             return false;
         }
         int copiesInLibrary = book.getQuantity();
@@ -87,16 +88,19 @@ public class GivingService {
     @PreAuthorize("hasRole('LIBRARIAN')")
     public GivenBook giveBook(Long bookId, Long readerId, Long orderId, Boolean toReadingRoom, LocalDateTime returnDate) {
         if (!canGiveBookById(bookId)) {
-            //TODO log issue
-            //TODO поймать это исключение
+            log.debug("Can't give the book with id " + bookId + ", don't have free copy");
             throw new IllegalStateException("Can't give the book, don't have free copy");
         }
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         Optional<User> optionalUser = userRepository.findById(readerId);
         if (optionalBook.isEmpty() || optionalUser.isEmpty()) {
-            //TODO log issue
-            //TODO поймать это исключение
+            if (optionalUser.isEmpty()) {
+                log.debug("Can't find reader by id " + readerId);
+            }
+            if (optionalBook.isEmpty()) {
+                log.debug("Can't find book by id " + bookId);
+            }
             throw new IllegalArgumentException("Can't find book or reader");
         }
 
@@ -127,6 +131,7 @@ public class GivingService {
     private void createRatingRequest(Long givenBookId) {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {
+            log.debug("Can't find the given book by id " + givenBookId);
             throw new IllegalArgumentException("Incorrect given book index " + givenBookId);
         }
         GivenBook givenBook = optionalGivenBook.get();

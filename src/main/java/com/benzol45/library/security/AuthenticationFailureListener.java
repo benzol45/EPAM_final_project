@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+//https://stackoverflow.com/questions/44086409/capture-authentication-failure-in-spring-security
 public class AuthenticationFailureListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
 
     public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
@@ -18,6 +19,6 @@ public class AuthenticationFailureListener implements ApplicationListener<Authen
         } catch (ClassCastException e) {
         }
 
-        log.warn("Authentication failed for user " + event.getAuthentication().getPrincipal() + " from address " + ip);
+        log.info("Authentication failed for user " + event.getAuthentication().getPrincipal() + " from address " + ip);
     }
 }

@@ -3,6 +3,7 @@ package com.benzol45.library.service;
 import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class BookService {
     private final BookRepository bookRepository;
     private final Metrics metrics;
@@ -52,7 +54,7 @@ public class BookService {
     }
 
     public Book getById(Long id) {
-        //TODO Не нашли - залогируй и верни пустое
+        log.debug("Can't find book with given id" + id);
         return bookRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Can't find book with id " + id));
     }
 
@@ -70,6 +72,7 @@ public class BookService {
         try {
             bytes = Files.readAllBytes(coverImage);
         } catch (IOException e) {
+            log.warn("Can't read cover image file " + coverImage.toAbsolutePath() + " for book with id " + book.getId());
             throw new IllegalStateException(e);
         }
         String base64String = Base64.getEncoder().encodeToString(bytes);
@@ -96,6 +99,7 @@ public class BookService {
         try {
             multipartFile.transferTo(Path.of(fileName));
         } catch (IOException e) {
+            log.warn("Can't write cover image file " + fileName + " for book with id " + book.getId());
             throw new IllegalStateException(e);
         }
 
@@ -113,6 +117,7 @@ public class BookService {
             Files.copy(inputStream, Path.of(fileName), StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException e) {
+            log.warn("Can't transfer external cover image file from " + externalCoverUrl + " to " + fileName + " for book with id " + book.getId());
             throw new IllegalStateException(e);
         }
 
@@ -127,6 +132,7 @@ public class BookService {
             try {
                 Files.createDirectory(Path.of(folderForImages));
             } catch (IOException e) {
+                log.warn("Can't create folder for storing cover images " + folderForImages);
                 throw new IllegalStateException(e);
             }
         }

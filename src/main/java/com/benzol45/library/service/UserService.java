@@ -3,6 +3,7 @@ package com.benzol45.library.service;
 import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.User;
 import com.benzol45.library.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -113,7 +115,7 @@ public class UserService {
 
     private void checkUserDetails(UserDetails userDetails) {
         if (!(userDetails instanceof User)) {
-            //TODO log issue
+            log.warn("Incorrect user activity detect. User: " + userDetails.getUsername());
             throw new IllegalStateException("User and user parameters are incorrect");
         }
     }

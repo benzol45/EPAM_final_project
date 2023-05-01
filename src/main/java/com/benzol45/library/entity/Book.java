@@ -17,13 +17,10 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "book")
 public class Book {
-    //TODO Нужны ли нам авторы и издетели отдельными таблицами ? нужно ли количество экземпляров книг отдельной таблицей ?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //TODO Выдача сообщений с ошибками валидации на нужных языках
-    //https://stackoverflow.com/questions/4805168/customize-spring-validation-error
     @NotNull
     @NotBlank
     @Size(min = 10, max = 13, message = "ISBN can be only 10 or 13 digits")

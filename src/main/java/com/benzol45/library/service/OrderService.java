@@ -7,6 +7,7 @@ import com.benzol45.library.entity.User;
 import com.benzol45.library.repository.BookRepository;
 import com.benzol45.library.repository.OrderRepository;
 import com.benzol45.library.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
     private final BookRepository bookRepository;
@@ -52,24 +54,22 @@ public class OrderService {
 
     @PreAuthorize("hasAnyRole('READER','LIBRARIAN')")
     public Order orderBook(Long bookId, Long userId) {
-        //Книга есть и пользователь есть
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isEmpty()) {
-            //TODO log issue
+            log.debug("Can't find book by id " + bookId);
             return null;
         }
         Book book = optionalBook.get();
 
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            //TODO log issue
+            log.debug("Can't find reader by id " + userId);
             return null;
         }
         User user = optionalUser.get();
 
-        //У этого пользователя нет заказа на эту книгу
         if (orderRepository.findByBookAndUser(book,user).isPresent()) {
-            //TODO log issue
+            log.debug("Reader with id " + userId + " already has order for book with id " + bookId);
             return null;
         }
 

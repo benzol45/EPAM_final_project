@@ -3,6 +3,7 @@ package com.benzol45.library.service;
 import com.benzol45.library.configuration.I18nUtil;
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.property.PropertyHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @Service
+@Slf4j
 public class FineService {
     private final I18nUtil i18nUtil;
     private final PropertyHolder propertyHolder;
@@ -89,5 +91,12 @@ public class FineService {
                 .append(" = ").append(calculateFineForGivenBook(givenBook));
 
         return stringBuilder.toString();
+    }
+
+    public void getFine(GivenBook givenBook) {
+        log.info("Got the fine from " + givenBook.getUser().getFullName()
+                + " for a book " + givenBook.getBook().getTitle()
+                + " with id " + givenBook.getBook().getId()
+                + ". Amount " + calculateFineForGivenBook(givenBook));
     }
 }
