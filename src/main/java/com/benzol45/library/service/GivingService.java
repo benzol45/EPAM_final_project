@@ -51,7 +51,7 @@ public class GivingService {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {
             log.debug("Can't find the given book by id " + givenBookId);
-            throw new IllegalStateException("Can't find the given book by id " + givenBookId);
+            throw new IllegalArgumentException("Can't find the given book by id " + givenBookId);
         }
 
         return optionalGivenBook.get();
