@@ -6,7 +6,7 @@
     <import class="ch.qos.logback.core.ConsoleAppender"/>
 
 <!--    https://www.codelord.net/2010/08/27/logging-with-a-context-users-in-logback-and-spring-security/ comments about adding user information to log
-        [%mdc{user} %mdc{session}]      -->
+        [%mdc{user} %mdc{session}] I can add filter OncePerRequestFilter and in it add info about user and session in MDC     -->
 
 <!--    https://intellij-support.jetbrains.com/hc/en-us/community/posts/10316380313874-logback-xml-effects-on-IntelIj-console-default-colors-how-I-can-fix-it-
         save default view of console logging with colors-->
@@ -25,7 +25,7 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%mdc{user} %mdc{session}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

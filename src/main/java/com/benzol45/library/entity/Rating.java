@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-//TODO Добавить индекс на книги - мы обычно будем искать именно по книге все оценки что бы получить средний рейтинг
-
 @Data
 @Builder
 @NoArgsConstructor

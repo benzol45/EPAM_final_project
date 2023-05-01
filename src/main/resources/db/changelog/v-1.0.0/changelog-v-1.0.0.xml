@@ -11,5 +11,6 @@
 
     <changeSet author="author" id="10">
         <sqlFile path="create_base_tables.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="create_base_indexes.sql" relativeToChangelogFile="true"/>
     </changeSet>
 </databaseChangeLog>
