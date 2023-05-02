@@ -66,7 +66,7 @@ public class UserService {
         if (current.isPresent()) {
             User user = current.get();
             user.setRole(role);
-            userRepository.save(user);
+            user = userRepository.save(user);
             metrics.refreshReaderCounter();
             return user;
         } else {

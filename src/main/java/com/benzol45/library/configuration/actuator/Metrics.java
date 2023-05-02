@@ -42,7 +42,9 @@ public class Metrics {
     }
 
     public void refreshBookCopyCounter() {
-        bookCopiesGauges.set(bookRepository.countBookCopy());
+        Integer bookCopy = bookRepository.countBookCopy();
+        bookCopy = (bookCopy == null) ? 0 : bookCopy;
+        bookCopiesGauges.set(bookCopy);
     }
 
     public void refreshReaderCounter() {

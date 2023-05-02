@@ -1,0 +1,10 @@
+DELETE FROM book;
+ALTER SEQUENCE book_id_seq RESTART WITH 1;
+DELETE FROM users WHERE login!='admin';
+ALTER SEQUENCE users_id_seq RESTART WITH 2;
+DELETE FROM given_book;
+ALTER SEQUENCE given_book_id_seq RESTART WITH 1;
+DELETE FROM orders;
+ALTER SEQUENCE orders_id_seq RESTART WITH 1;
+DELETE FROM rating;
+ALTER SEQUENCE rating_id_seq RESTART WITH 1;
