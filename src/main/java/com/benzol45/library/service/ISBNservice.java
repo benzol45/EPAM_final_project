@@ -89,7 +89,11 @@ public class ISBNservice {
         }
         Map body = entity.getBody();
         Book.BookBuilder bookBuilder = Book.builder();
-        bookBuilder.ISBN((String) ((List)body.get("isbn_13")).get(0));
+        if (body.get("isbn_13") != null) {
+            bookBuilder.ISBN((String) ((List) body.get("isbn_13")).get(0));
+        } else {
+            bookBuilder.ISBN((String) ((List) body.get("isbn_10")).get(0));
+        }
         bookBuilder.author(getAuthors(body));
         bookBuilder.title((String) body.get("title"));
         bookBuilder.pages(body.get("number_of_pages")!= null ? (Integer)body.get("number_of_pages") : 0);
@@ -117,7 +121,11 @@ public class ISBNservice {
 
         return (String) authorsList.stream()
                 .map(o->((Map)o).get("author"))
-                .map(o->((Map)o).get("key"))
+                .map(o -> {
+                    if (o instanceof Map) {
+                        return ((Map) o).get("key");
+                    } else return (String) o;
+                })
                 .map(path->"https://openlibrary.org"+(String)path+".json")
                 .map(link->restTemplate.getForObject((String) link, Map.class))
                 .map(a->(String)((Map)a).get("name"))
