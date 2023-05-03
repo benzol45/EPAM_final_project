@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -45,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class Book {
     @Autowired
     private MockMvc mockMvc;
+    //TODO добавить проверку в репо
 
     @Test
     @WithUserDetails("admin")//  https://stackoverflow.com/questions/15203485/spring-test-security-how-to-mock-authentication
