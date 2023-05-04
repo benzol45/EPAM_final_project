@@ -12,6 +12,10 @@
     </style>
 </head>
 <body>
+    <a href="/">Back to Main page</a>
+    <br/>
+    <br/>
+
     <form method="get" action="/catalog">
         <label for="filter" th:text="#{bookCatalog.filter.label}">Find books by Title or Author</label><input type="text" id="filter" name="filter" th:value="${filter}">
         <input type="submit" th:value="#{bookCatalog.filter.button}">
