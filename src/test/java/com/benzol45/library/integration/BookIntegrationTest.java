@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("/application_test.properties")
 @Sql(value = "/clean_tables.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "/clean_tables.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class Book {
+public class BookIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     //TODO добавить проверку в репо

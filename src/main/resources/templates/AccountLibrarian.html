@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title th:text="#{librarian.title}">Librarian</title>
 
     <style>
@@ -21,7 +21,7 @@
         <div><label for="contact"><b th:text="#{librarian.contact}">Contact: </b></label> <span id="contact" th:text="${librarian.getContact()}"></span></div>
         <div><label for="login"><b th:text="#{librarian.login}">Login: </b></label> <span id="login" th:text="${librarian.getLogin()}"></span></div>
     </big></big>
-    <br>
+    <br/>
 
     <h2 th:text="#{librarian.orders}">Readers orders</h2>
     <table>
@@ -31,15 +31,17 @@
             <td th:text="#{librarian.table.create}">Create</td>
             <td id="give"></td>
         </tr>
-        <tr th:each="order: ${orders}">
-            <td><a th:href="@{/book/{id}/info (id=${order.getBook().getId()})}" th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</a></td>
-            <td><a th:href="@{/reader/{id} (id=${order.getUser().getId()})}" th:text="${order.getUser().getFullName()}">reader</a></td>
-            <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
-            <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}" th:text="#{librarian.table.give}">give</a></td>
-        </tr>
+        <div th:each="order: ${orders}">
+            <tr>
+                <td><a th:href="@{/book/{id}/info (id=${order.getBook().getId()})}" th:text="${order.getBook().getTitle() + ' (' + order.getBook().getAuthor() + ')'}">book</a></td>
+                <td><a th:href="@{/reader/{id} (id=${order.getUser().getId()})}" th:text="${order.getUser().getFullName()}">reader</a></td>
+                <td th:text="${order.getCreateDate().format(dateFormatter)}">created date</td>
+                <td><a th:href="@{/book_give/{book_id}?readerId={reader_id}&orderId={order_id} (book_id=${order.getBook().getId()}, reader_id=${order.getUser().getId()}, order_id=${order.getId()})}" th:if="${canGiveOrders.contains(order)}" th:text="#{librarian.table.give}">give</a></td>
+            </tr>
+        </div>
     </table>
-    <br>
-    <br>
+    <br/>
+    <br/>
 
     <h2 th:text="#{librarian.givenBooks}">Given books</h2>
     <table>
@@ -52,17 +54,19 @@
             <td id="return"></td>
             <td th:text="#{librarian.table.fine}">Fine</td>
         </tr>
-        <tr th:each="givenBook: ${given_books}" th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
-            <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
-            <td><a th:href="@{/reader/{id} (id=${givenBook.getUser().getId()})}" th:text="${givenBook.getUser().getFullName()}">reader</a></td>
-            <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
-            <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">given date</td>
-            <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
-            <td><a th:href="@{/book_return/{given_book_id} (given_book_id=${givenBook.getId()})}" th:text="#{librarian.table.return}">return</a></td>
-            <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
-        </tr>
+        <div th:each="givenBook: ${given_books}">
+            <tr th:classappend="${fines.get(givenBook)>0 ? 'redRow' : ''}">
+                <td><a th:href="@{/book/{id}/info (id=${givenBook.getBook().getId()})}" th:text="${givenBook.getBook().getTitle() + ' (' + givenBook.getBook().getAuthor() + ')'}">book</a></td>
+                <td><a th:href="@{/reader/{id} (id=${givenBook.getUser().getId()})}" th:text="${givenBook.getUser().getFullName()}">reader</a></td>
+                <td th:text="${givenBook.isInReadingRoom() ? 'YES' : ''}" align="center">reading room</td>
+                <td th:text="${givenBook.getGivenDate().format(dateFormatter)}">given date</td>
+                <td th:text="${givenBook.getReturnDate().format(dateFormatter)}">return date</td>
+                <td><a th:href="@{/book_return/{given_book_id} (given_book_id=${givenBook.getId()})}" th:text="#{librarian.table.return}">return</a></td>
+                <td th:text="${fines.get(givenBook)>0 ? fines.get(givenBook): ''}" align="center">fine</td>
+            </tr>
+        </div>
     </table>
-    <br>
+    <br/>
 
     <a href="#" onclick="history.go(-1)" th:text="#{librarian.back}">Go Back</a>
 </body>

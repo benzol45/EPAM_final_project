@@ -29,12 +29,13 @@ class ISBNserviceTest {
     void fillByISBN() {
         RestTemplate mockRestTemplate = Mockito.mock(RestTemplate.class);
         Map<String,Object> bookResponse = Map.of("isbn_13", List.of("1234567890128"),
-                                                 "authors", List.of(Map.of("key","/authors/mock_author")),
+                                                 "works", List.of(Map.of("key","/works/mock_work")),
                                                  "title", "MockTitle",
                                                  "number_of_pages",42,
                                                  "publishers", List.of("MockPublisher"),
                                                  "publish_date","Jan 10, 2011");
         when(mockRestTemplate.getForEntity(contains("https://openlibrary.org/isbn"),any())).thenReturn(ResponseEntity.ok().body(bookResponse));
+        when(mockRestTemplate.getForObject(contains("https://openlibrary.org/works/mock_work"),any())).thenReturn(Map.of("authors",List.of(Map.of("author","/authors/mock_author"))));
         when(mockRestTemplate.getForObject(contains("https://openlibrary.org/authors/mock_author"),any())).thenReturn(Map.of("name","MockAuthor"));
 
         ISBNservice isbnService = new ISBNservice(mockRestTemplate);

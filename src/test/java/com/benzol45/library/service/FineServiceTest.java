@@ -1,6 +1,8 @@
 package com.benzol45.library.service;
 
+import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.GivenBook;
+import com.benzol45.library.entity.User;
 import com.benzol45.library.property.PropertyHolder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -61,5 +63,13 @@ class FineServiceTest {
         assertEquals(dayFine,fineService.calculateFineForGivenBook(givenBookLastDayMinus2HoursNotReadingRoom));
         GivenBook givenBookLastDayMinus26HoursNotReadingRoom = GivenBook.builder().returnDate(LocalDateTime.now().withHour(0).withMinute(0).minusHours(26)).inReadingRoom(false).build();
         assertEquals(2L*dayFine,fineService.calculateFineForGivenBook(givenBookLastDayMinus26HoursNotReadingRoom));
+    }
+
+    @Test
+    void getFine() {
+        Book book = Book.builder().id(1L).title("Book title").build();
+        User user = new User(1L,"user","","user","",false, User.Role.READER);
+        GivenBook givenBook = GivenBook.builder().book(book).user(user).inReadingRoom(true).givenDate(LocalDateTime.now().minusHours(5)).returnDate(LocalDateTime.now().minusHours(2)).build();
+        fineService.getFine(givenBook);
     }
 }

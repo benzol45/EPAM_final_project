@@ -61,7 +61,7 @@ public class FineService {
     }
 
     private long getDaysForFine(GivenBook givenBook) {
-        return Period.between(givenBook.getReturnDate().toLocalDate(), LocalDate.now()).get(ChronoUnit.DAYS);
+        return ChronoUnit.DAYS.between(givenBook.getReturnDate().toLocalDate(), LocalDate.now());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -70,6 +70,7 @@ public class FineService {
             return i18nUtil.getMessage("fineService","noFine", locale);
         }
 
+        //TODO доделать перевод
         StringBuilder stringBuilder = new StringBuilder();
         String timeUnit = givenBook.isInReadingRoom() ? "hour" : "day";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");

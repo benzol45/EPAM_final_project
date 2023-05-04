@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title th:text="#{reader.title}">Reader</title>
 
     <style>
@@ -21,7 +21,7 @@
     <div><label for="contact"><b th:text="#{reader.contact}">Contact: </b></label> <span id="contact" th:text="${reader.getContact()}"></span></div>
     <div sec:authorize="hasRole('READER')"><label for="login"><b th:text="#{reader.login}">Login: </b></label> <span id="login" th:text="${reader.getLogin()}"></span></div>
     </big></big>
-    <br>
+    <br/>
 
     <h2 th:text="#{reader.orders}">Orders</h2>
     <table>
@@ -38,8 +38,8 @@
             </tr>
         </div>
     </table>
-    <br>
-    <br>
+    <br/>
+    <br/>
 
     <h2 th:text="#{reader.page.books}">Books</h2>
     <table>
@@ -60,7 +60,7 @@
             </tr>
         </div>
     </table>
-    <br>
+    <br/>
 
     <div sec:authorize="hasRole('READER')" th:if="${rating_requests}">
         <h3 th:text="#{reader.rate}">Please rate books, which you read</h3>
@@ -83,7 +83,7 @@
                 </td>
             </tr>
         </table>
-        <br>
+        <br/>
     </div>
 
     <a href="#" onclick="history.go(-1)" th:text="#{reader.back}">Go Back</a>
