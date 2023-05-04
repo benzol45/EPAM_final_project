@@ -12,7 +12,7 @@
     <h3 th:text="#{root.page.line3}">You can take books on a subscription for 5 days. You must return books before library closing (7PM) on fifth day, and if it's Sunday - before closing in Monday</h3>
     <h3><span th:text="#{root.page.line4_1}">If you can't return books on time the fine is </span><span th:text="${hour_fine}">hour fine</span> <span th:text="#{root.page.line4_2}">for one hour in reading room and </span><span th:text="${day_fine}">day fine</span> <span th:text="#{root.page.line4_3}"> for one day on the subscription.</span></h3>
     <br>
-    <h3 th:if="${role}" th:text="#{root.page.role}">Your current role is <span th:text="${role}"></span></h3>
+    <h3> <span th:if="${role}" th:text="#{root.page.role}">Your current role is</span> <span th:text="${role}"></span> </h3>
     <br>
     <h3 th:text="#{root.links}">Links:</h3>
     <a href="?lang=ru">Русский интерфейс</a><br>
