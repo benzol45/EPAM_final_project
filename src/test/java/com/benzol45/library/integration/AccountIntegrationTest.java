@@ -14,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.containsString;
@@ -90,7 +91,7 @@ public class AccountIntegrationTest {
                         .param("reader_id","2")
                         .param("order_id","1")
                         .param("to_reading_room","false")
-                        .param("return_date", "2000-01-01T14:30"))
+                        .param("return_date", LocalDate.now().toString()+"T23:59"))
                 //.andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/account/librarian"));
@@ -102,34 +103,38 @@ public class AccountIntegrationTest {
                 .andExpect(xpath("/html/body/table[2]/div").nodeCount(3))
                 .andExpect(xpath("/html/body/table[1]/div[1]/tr/td[1]/a").string("title 2 (b)"))
                 .andExpect(xpath("/html/body/table[1]/div[1]/tr/td[2]/a").string("reader"))
-                .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[1]/a").string("title 1 (a)"))
+                .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[1]/a").string("title 3 (c)"))
                 .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[2]/a").string("reader"))
-                .andExpect(xpath("/html/body/table[2]/div[2]/tr/td[1]/a").string("title 3 (c)"))
+                .andExpect(xpath("/html/body/table[2]/div[2]/tr/td[1]/a").string("title 4 (d)"))
                 .andExpect(xpath("/html/body/table[2]/div[2]/tr/td[2]/a").string("reader"))
-                .andExpect(xpath("/html/body/table[2]/div[3]/tr/td[1]/a").string("title 4 (d)"))
+                .andExpect(xpath("/html/body/table[2]/div[3]/tr/td[1]/a").string("title 1 (a)"))
                 .andExpect(xpath("/html/body/table[2]/div[3]/tr/td[2]/a").string("reader"));
 
         //return given book
         mockMvc.perform(get("/book_return/3"))
                 //.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(Matchers.containsString("<form action=\"/book_return_with_fine/3\" method=\"get\">")));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/account/librarian"));
 
-        mockMvc.perform(get("/book_return_with_fine/3"))
+        //return given book with the fine
+        mockMvc.perform(get("/book_return/1"))
+                //.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(Matchers.containsString("<form action=\"/book_return_with_fine/1\" method=\"get\">")));
+
+        mockMvc.perform(get("/book_return_with_fine/1"))
                 //.andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/account/librarian"));
 
-        //check that have one reader order and two given books
+        //check that have one reader order and one given books
         mockMvc.perform(get("/account/librarian"))
                 //.andDo(print())
                 .andExpect(xpath("/html/body/table[1]/div").nodeCount(1))
-                .andExpect(xpath("/html/body/table[2]/div").nodeCount(2))
+                .andExpect(xpath("/html/body/table[2]/div").nodeCount(1))
                 .andExpect(xpath("/html/body/table[1]/div[1]/tr/td[1]/a").string("title 2 (b)"))
                 .andExpect(xpath("/html/body/table[1]/div[1]/tr/td[2]/a").string("reader"))
-                .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[1]/a").string("title 3 (c)"))
-                .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[2]/a").string("reader"))
-                .andExpect(xpath("/html/body/table[2]/div[2]/tr/td[1]/a").string("title 4 (d)"))
-                .andExpect(xpath("/html/body/table[2]/div[2]/tr/td[2]/a").string("reader"));
+                .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[1]/a").string("title 4 (d)"))
+                .andExpect(xpath("/html/body/table[2]/div[1]/tr/td[2]/a").string("reader"));
     }
 }

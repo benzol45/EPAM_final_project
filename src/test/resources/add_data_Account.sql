@@ -18,6 +18,6 @@ INSERT INTO orders(user_id, book_id, create_date)
 VALUES (2,2,current_timestamp);
 
 INSERT INTO given_book(user_id, book_id, given_date, return_date)
-VALUES (2,3,current_timestamp,current_timestamp);
+VALUES (2,3,current_timestamp,current_timestamp - INTERVAL '1 DAY');
 INSERT INTO given_book(user_id, book_id, given_date, return_date)
 VALUES (2,4,current_timestamp,current_timestamp);
