@@ -34,8 +34,8 @@ public class ISBNservice {
             return false;
         }
 
-    //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BD%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9_%D0%BD%D0%BE%D0%BC%D0%B5%D1%80
-        //TODO реализовать проверку по формату 10 и 13 символов   "978"+10
+        //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BD%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9_%D0%BD%D0%BE%D0%BC%D0%B5%D1%80
+        //Можно реализовать проверку по формату 10 и 13 символов "978"+10. В принципе большого смысла нет - по неправильному сервис просто ничего не найдёт
         return true;
     }
 
@@ -51,7 +51,7 @@ public class ISBNservice {
         }
 
         Map body = entity.getBody();
-        if (((List)body.get("covers")).isEmpty()) {
+        if (body.get("covers")==null || ((List)body.get("covers")).isEmpty()) {
             return Optional.empty();
         }
         Integer coverId = (Integer) ((List)body.get("covers")).get(0);

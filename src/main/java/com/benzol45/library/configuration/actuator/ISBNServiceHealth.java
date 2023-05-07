@@ -1,16 +1,21 @@
 package com.benzol45.library.configuration.actuator;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class ISBNServiceHealth implements HealthIndicator {
     private final RestTemplate restTemplate;
+    private Health current = null;
+    private LocalDateTime checkingTime = null;
 
     public ISBNServiceHealth(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -18,14 +23,32 @@ public class ISBNServiceHealth implements HealthIndicator {
 
     @Override
     public Health health() {
+        log.warn("get ISBN state");
+        if (current==null || LocalDateTime.now().isAfter(checkingTime.plusMinutes(1))) {
+            checkStateISBNService();
+        }
+
+        if (current!=null) {
+            return current;
+        } else {
+            return Health.unknown().build();
+        }
+    }
+
+    private void checkStateISBNService() {
+        log.warn("recheck ISBN state");
+
+        checkingTime = LocalDateTime.now();
+        current = Health.unknown().build();
+
         String testISBN = "9788498921939";
         try {
             restTemplate.getForEntity("https://openlibrary.org/isbn/" + testISBN + ".json", String.class);
-            return Health.up().withDetail("ISBN", testISBN).withDetail("response", "OK").build();
+            current = Health.up().withDetail("ISBN", testISBN).withDetail("response", "OK").build();
         } catch (HttpClientErrorException.NotFound e) {
-            return Health.up().withDetail("ISBN", testISBN).withDetail("response", "Not found this code in database").build();
+            current = Health.up().withDetail("ISBN", testISBN).withDetail("response", "Not found this code in database").build();
         } catch (Throwable e) {
-            return Health.down().withDetail("ISBN",testISBN).withDetail("response", "Throw exception").build();
+            current = Health.down().withDetail("ISBN",testISBN).withDetail("response", "Throw exception").build();
         }
     }
 }
