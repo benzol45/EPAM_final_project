@@ -1,6 +1,7 @@
 package com.benzol45.library.integration;
 
 import com.benzol45.library.entity.User;
+import com.benzol45.library.repository.BookRepository;
 import com.benzol45.library.security.UserDetailsServiceImpl;
 import com.benzol45.library.service.UserService;
 import org.hamcrest.Matchers;
@@ -44,7 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BookIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-    //TODO добавить проверку в репо
+    @Autowired
+    private BookRepository bookRepository;
 
     @Test
     @WithUserDetails("admin")//  https://stackoverflow.com/questions/15203485/spring-test-security-how-to-mock-authentication
@@ -54,6 +56,7 @@ public class BookIntegrationTest {
                 //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(not(containsString("<td"))));
+        assertEquals(0,bookRepository.findAll().size());
 
         //add 2 new books
         MockMultipartFile emptyFilePart = new MockMultipartFile("uploadCoverImage", "cover.jpg", "MediaType.IMAGE_JPEG", new byte[0]);
@@ -93,6 +96,7 @@ public class BookIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("test title 1")))
                 .andExpect(content().string(containsString("test title 2")));
+        assertEquals(2,bookRepository.findAll().size());
 
         //edit first
         MockMultipartFile emptyFileMPart = new MockMultipartFile("uploadCoverImage", "cover.jpg", "MediaType.IMAGE_JPEG", new byte[0]);
@@ -130,6 +134,7 @@ public class BookIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(not(containsString("test title new version 1"))))
                 .andExpect(content().string(containsString("test title 2")));
+        assertEquals(1,bookRepository.findAll().size());
 
         //check that can get book info
         mockMvc.perform(get("/book/2/info"))

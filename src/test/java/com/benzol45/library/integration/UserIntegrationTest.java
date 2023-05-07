@@ -1,5 +1,6 @@
 package com.benzol45.library.integration;
 
+import com.benzol45.library.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,7 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-    //TODO добавить проверку в репо
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     @WithUserDetails("admin")
@@ -40,6 +42,7 @@ public class UserIntegrationTest {
                 .andExpect(xpath("/html/body/table[2]/div").nodeCount(0))
                 .andExpect(xpath("/html/body/table[3]/div").nodeCount(1))
                 .andExpect(xpath("/html/body/table[3]/div/tr/td[1]").string("admin"));
+        assertEquals(1,userRepository.findAll().size());
 
         //add 2 new users
         mockMvc.perform(post("/user/new").with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -67,6 +70,7 @@ public class UserIntegrationTest {
                 .andExpect(xpath("/html/body/table[1]/div[1]/tr/td[1]").string("librarian"))
                 .andExpect(xpath("/html/body/table[1]/div[2]/tr/td[1]").string("reader"))
                 .andExpect(xpath("/html/body/table[3]/div/tr/td[1]").string("admin"));
+        assertEquals(3,userRepository.findAll().size());
 
         //set role reader for first and librarian for second
         mockMvc.perform(get("/user/2/set/reader"))
@@ -135,5 +139,6 @@ public class UserIntegrationTest {
                 .andExpect(xpath("/html/body/table[3]/div").nodeCount(2))
                 .andExpect(xpath("/html/body/table[3]/div[1]/tr/td[1]").string("admin"))
                 .andExpect(xpath("/html/body/table[3]/div[2]/tr/td[1]").string("librarian"));
+        assertEquals(2,userRepository.findAll().size());
     }
 }
