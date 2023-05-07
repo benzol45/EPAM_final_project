@@ -14,9 +14,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -142,5 +145,23 @@ public class GivingService {
         return givenBookRepository.findAllByBook(book, Sort.by("returnDate")).stream()
                 .map(GivenBook::getReturnDate)
                 .findFirst().orElse(null);
+    }
+
+    public void checkReturnDate(Boolean toReadingRoom, LocalDateTime returnDate) {
+        if (returnDate.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Return date&time incorrect. Can't be before now.");
+        }
+
+        if (toReadingRoom) {
+            //return only this day
+            if (!LocalDate.now().isEqual(returnDate.toLocalDate())) {
+                throw new IllegalArgumentException("Books in reading room must be returned this day");
+            }
+        } else {
+            //returning not more than 1 month
+            if (ChronoUnit.MONTHS.between(LocalDate.now(),returnDate)>=1) {
+                throw new IllegalArgumentException("Books can give on a subscription not more than 1 month");
+            }
+        }
     }
 }

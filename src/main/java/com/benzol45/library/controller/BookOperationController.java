@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 @Controller
 public class BookOperationController {
@@ -71,7 +70,8 @@ public class BookOperationController {
                            @RequestParam(value = "order_id", required = false) Long orderId,
                            @RequestParam(value = "to_reading_room", defaultValue = "false") Boolean toReadingRoom,
                            @RequestParam("return_date") LocalDateTime returnDate) {
-        //TODO проверить дату выдачи, дату возврата
+
+        givingService.checkReturnDate(toReadingRoom, returnDate);
 
         if (givingService.canGiveBookById(bookId)) {
             givingService.giveBook(bookId, readerId, orderId, toReadingRoom, returnDate);

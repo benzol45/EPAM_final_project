@@ -142,4 +142,24 @@ class GivingServiceTest {
         verify(spyGivenBookRepository,times(1)).deleteById(1L);
         verify(spyRatingService,times(1)).createRatingRequest(testUser,testBook);
     }
+
+    @Test
+    void returnDate() {
+        GivingService givingService = new GivingService(null,null,null,null,null);
+
+        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().minusDays(1)));
+
+        givingService.checkReturnDate(true,LocalDateTime.now());
+        givingService.checkReturnDate(true,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59));
+        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).plusSeconds(2)));
+        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().plusYears(2)));
+
+        givingService.checkReturnDate(false,LocalDateTime.now());
+        givingService.checkReturnDate(false,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59));
+        givingService.checkReturnDate(false,LocalDateTime.now().plusDays(25));
+        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(false,LocalDateTime.now().plusDays(35)));
+        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(false,LocalDateTime.now().plusYears(2)));
+
+
+    }
 }
