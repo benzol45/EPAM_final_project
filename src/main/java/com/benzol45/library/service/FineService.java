@@ -70,25 +70,25 @@ public class FineService {
             return i18nUtil.getMessage("fineService","noFine", locale);
         }
 
-        //TODO доделать перевод
         StringBuilder stringBuilder = new StringBuilder();
-        String timeUnit = givenBook.isInReadingRoom() ? "hour" : "day";
+        String timeUnit = givenBook.isInReadingRoom() ? i18nUtil.getMessage("fineService","hour", locale) : i18nUtil.getMessage("fineService","day", locale);
+        String timeUnits = givenBook.isInReadingRoom() ? i18nUtil.getMessage("fineService","hours", locale) : i18nUtil.getMessage("fineService","days", locale);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
         long fainPeriods = givenBook.isInReadingRoom() ? getHoursForFine(givenBook) : getDaysForFine(givenBook);
         long fainUnit = givenBook.isInReadingRoom() ? hourFain : dayFain;
 
-        stringBuilder.append("Reader ").append(givenBook.getUser().getFullName())
-                .append(" delayed the book ").append(givenBook.getBook().getTitle())
-                .append(givenBook.isInReadingRoom() ? " in the reading room" : " on a subscription")
-                .append(" for ").append(fainPeriods).append(" ").append(timeUnit).append("s").append('\n');
+        stringBuilder.append(i18nUtil.getMessage("fineService","line1.1", locale)).append(" ").append(givenBook.getUser().getFullName()).append(" ")
+                .append(i18nUtil.getMessage("fineService","line1.2", locale)).append(" ").append(givenBook.getBook().getTitle()).append(" ")
+                .append(givenBook.isInReadingRoom() ? i18nUtil.getMessage("fineService","readingRoom", locale) : i18nUtil.getMessage("fineService","subscription", locale)).append(" ")
+                .append(i18nUtil.getMessage("fineService","line1.3", locale)).append(" ").append(fainPeriods).append(" ").append(timeUnits).append('\n');
 
-        stringBuilder.append("Should have returned ").append(givenBook.getReturnDate().format(dateTimeFormatter))
-                .append(", returning ").append(LocalDateTime.now().format(dateTimeFormatter)).append('\n');
+        stringBuilder.append(i18nUtil.getMessage("fineService","line2.1", locale)).append(" ").append(givenBook.getReturnDate().format(dateTimeFormatter))
+                .append(i18nUtil.getMessage("fineService","line2.2", locale)).append(" ").append(LocalDateTime.now().format(dateTimeFormatter)).append('\n');
 
-        stringBuilder.append("The fine for every ").append(timeUnit)
-                .append(" is ").append(fainUnit).append('\n');
+        stringBuilder.append(i18nUtil.getMessage("fineService","line3.1", locale)).append(" ").append(timeUnit).append(" ")
+                .append(i18nUtil.getMessage("fineService","line3.2", locale)).append(" ").append(fainUnit).append('\n');
 
-        stringBuilder.append("Total fine is ").append(fainPeriods).append(" * ").append(fainUnit)
+        stringBuilder.append(i18nUtil.getMessage("fineService","line4.1", locale)).append(" ").append(fainPeriods).append(" * ").append(fainUnit)
                 .append(" = ").append(calculateFineForGivenBook(givenBook));
 
         return stringBuilder.toString();
