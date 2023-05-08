@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Book rating
+ */
+
 @Data
 @Builder
 @NoArgsConstructor

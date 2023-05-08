@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Check the uniqueness of ISBN for new books
+ */
+
 @Component
 public class BookUniqValidator  implements Validator {
     private final BookRepository bookRepository;

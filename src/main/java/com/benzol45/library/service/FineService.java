@@ -18,6 +18,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
+/**
+ * Contains methods for working with the fines (creating/calculating/explaining)
+ */
+
 @Service
 @Slf4j
 public class FineService {

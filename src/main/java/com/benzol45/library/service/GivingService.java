@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Contains methods for giving and returning books to/from readers and getting information about given books
+ */
+
 @Service
 @Slf4j
 public class GivingService {

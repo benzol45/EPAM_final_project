@@ -17,6 +17,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Contains methods for processing orders (create/edit/delete/get/find)
+ */
+
 @Service
 @Slf4j
 public class OrderService {

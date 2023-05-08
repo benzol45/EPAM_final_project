@@ -7,6 +7,10 @@ import org.springframework.security.authentication.event.AuthenticationFailureBa
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
+/**
+ * Catch exceptions with authentication errors
+ */
+
 @Component
 @Slf4j
 //https://stackoverflow.com/questions/44086409/capture-authentication-failure-in-spring-security

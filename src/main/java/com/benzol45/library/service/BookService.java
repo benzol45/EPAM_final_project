@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Contains methods for processing books (create/edit/delete/get/find)
+ */
+
 @Service
 @Slf4j
 public class BookService {
@@ -95,7 +99,7 @@ public class BookService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void setMultipartFileAsCoverImage(Book book, MultipartFile multipartFile) {
         UUID uuid = UUID.randomUUID();
-        String fileName = getFolderForImages() + uuid.toString() + ".jpg";
+        String fileName = getFolderForStoringImages() + uuid.toString() + ".jpg";
         try {
             multipartFile.transferTo(Path.of(fileName));
         } catch (IOException e) {
@@ -110,7 +114,7 @@ public class BookService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void setExternalFileAsCoverImage(Book book, String externalCoverUrl) {
         UUID uuid = UUID.randomUUID();
-        String fileName = getFolderForImages() + uuid.toString() + ".jpg";
+        String fileName = getFolderForStoringImages() + uuid.toString() + ".jpg";
 
         try {
             InputStream inputStream = new URL(externalCoverUrl).openStream();
@@ -125,7 +129,7 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    private String getFolderForImages() {
+    private String getFolderForStoringImages() {
         String homeDir = System.getProperty("user.home");
         String folderForImages = homeDir + "/library_images/";
         if (Files.notExists(Path.of(folderForImages))) {

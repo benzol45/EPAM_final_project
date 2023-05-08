@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Contains methods for work with users
+ */
+
 @Service
 @Slf4j
 public class UserService {

@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Given to the reader book
+ */
+
 @Data
 @Builder
 @NoArgsConstructor

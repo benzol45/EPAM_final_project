@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Check the uniqueness of the users login
+ */
+
 @Component
 public class UserUniqValidator implements Validator {
     private final UserRepository userRepository;

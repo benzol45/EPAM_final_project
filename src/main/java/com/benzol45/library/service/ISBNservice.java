@@ -17,6 +17,10 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Contains methods for getting books information from EXTERNAL ISBN database (openlibrary.org)
+ */
+
 @Service
 @Slf4j
 public class ISBNservice {
