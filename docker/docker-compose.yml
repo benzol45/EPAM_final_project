@@ -7,6 +7,8 @@ services:
       dockerfile: ./docker/app/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./app/logs:/APP/logs
     depends_on:
       postgres:
         condition: service_started
@@ -30,7 +32,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@library.com
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - ${PWD}/pgadmin4/servers.json:/pgadmin4/servers.json
+      - ./pgadmin4/servers.json:/pgadmin4/servers.json
     ports:
       - "8081:80"    
     depends_on:
