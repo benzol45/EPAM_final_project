@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +41,7 @@ public class RatingService {
         return ratingRepository.findAllByUserAndRateIsNull(user, Sort.by("createDate").descending());
     }
 
+    @Transactional
     @PreAuthorize("hasRole('READER')")
     public void setRating(User user, Long ratingRequestId, int rate) {
         if (rate<0 || rate>10) {

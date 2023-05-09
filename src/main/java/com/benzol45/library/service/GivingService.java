@@ -128,6 +128,7 @@ public class GivingService {
         return givenBook;
     }
 
+    @Transactional
     @PreAuthorize("hasRole('LIBRARIAN')")
     public void returnBook(Long givenBookId) {
         createRatingRequest(givenBookId);
