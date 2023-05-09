@@ -15,7 +15,7 @@ public class DefaultExceptionHandle {
         mav.addObject("url", req.getRequestURL());
         mav.addObject("exceptionClass", e.getClass().getName());
         mav.addObject("exceptionMessage", e.getMessage());
-        mav.setViewName("/error/AnyException");
+        mav.setViewName("error/AnyException");
         return mav;
     }
 }

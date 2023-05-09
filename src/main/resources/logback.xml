@@ -33,6 +33,10 @@
         <appender-ref ref="ROLLING_FILE"/>
     </logger>
 
+    <logger name="*" level="WARN">
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
