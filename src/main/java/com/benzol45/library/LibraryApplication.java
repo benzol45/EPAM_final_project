@@ -10,8 +10,6 @@ public class LibraryApplication {
         SpringApplication.run(LibraryApplication.class, args);
     }
 
-    //Комменты, javadoc
-    //Упаковка в контейнер (??? адрес базы, пароль и логин из окружения)
     //Выписать в презентацию "интересные фишки"
     //Пройтись по полезностям и выписать ссылки на примеры
 

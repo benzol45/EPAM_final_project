@@ -23,7 +23,7 @@ public class ISBNServiceHealth implements HealthIndicator {
 
     @Override
     public Health health() {
-        log.warn("get ISBN state");
+        log.info("get ISBN state");
         if (current==null || LocalDateTime.now().isAfter(checkingTime.plusMinutes(1))) {
             checkStateISBNService();
         }
@@ -36,7 +36,7 @@ public class ISBNServiceHealth implements HealthIndicator {
     }
 
     private void checkStateISBNService() {
-        log.warn("recheck ISBN state");
+        log.info("recheck ISBN state");
 
         checkingTime = LocalDateTime.now();
         current = Health.unknown().build();
