@@ -90,7 +90,9 @@ public class UserService {
         if (current.isPresent()) {
             User user = current.get();
             user.setBlocked(false);
-            return userRepository.save(user);
+            user = userRepository.save(user);
+            metrics.refreshReaderCounter();
+            return user;
         } else {
             return null;
         }
@@ -102,7 +104,9 @@ public class UserService {
         if (current.isPresent()) {
             User user = current.get();
             user.setBlocked(true);
-            return userRepository.save(user);
+            user = userRepository.save(user);
+            metrics.refreshReaderCounter();
+            return user;
         } else {
             return null;
         }

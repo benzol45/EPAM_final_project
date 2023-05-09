@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
     private UserService userService;
     private UserRepository spyUserRepository;
-    Metrics spyMetrics;
+    private Metrics spyMetrics;
     private User testUser;
 
     @BeforeEach
@@ -76,7 +76,7 @@ class UserServiceTest {
 
         user = userService.unblock(1L);
         verify(spyUserRepository,times(1)).save(any());
-        verify(spyMetrics,times(0)).refreshReaderCounter();
+        verify(spyMetrics,times(1)).refreshReaderCounter();
         testUser.setBlocked(false);
         assertEquals(testUser, user);
         assertFalse(user.isBlocked());
@@ -93,7 +93,7 @@ class UserServiceTest {
 
         user = userService.block(1L);
         verify(spyUserRepository,times(1)).save(any());
-        verify(spyMetrics,times(0)).refreshReaderCounter();
+        verify(spyMetrics,times(1)).refreshReaderCounter();
         testUser.setBlocked(true);
         assertEquals(testUser, user);
         assertTrue(user.isBlocked());

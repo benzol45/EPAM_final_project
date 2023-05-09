@@ -24,7 +24,7 @@ class GivingServiceTest {
         when(givenBookRepository.findById(1L)).thenReturn(Optional.of(testGivenBook));
         when(givenBookRepository.findById(2L)).thenReturn(Optional.empty());
 
-        GivingService givingService = new GivingService(null,null,givenBookRepository,null,null);
+        GivingService givingService = new GivingService(null,null,givenBookRepository,null,null, null);
         assertEquals(testGivenBook, givingService.getById(1L));
         assertThrows(IllegalArgumentException.class, ()->givingService.getById(2L));
     }
@@ -37,7 +37,7 @@ class GivingServiceTest {
         BookRepository mockBookRepository = mock(BookRepository.class);
         when(mockBookRepository.findById(1L)).thenReturn(Optional.of(testBook));
         when(mockBookRepository.findById(2L)).thenReturn(Optional.empty());
-        GivingService givingService = new GivingService(mockBookRepository,null,mockGivenBookRepository,null,null);
+        GivingService givingService = new GivingService(mockBookRepository,null,mockGivenBookRepository,null,null, null);
 
         assertFalse(()->givingService.canGiveBookById(2L));
 
@@ -59,7 +59,7 @@ class GivingServiceTest {
         Book testBook = Book.builder().id(1L).quantity(3).build();
 
         GivenBookRepository mockGivenBookRepository = mock(GivenBookRepository.class);
-        GivingService givingService = new GivingService(null,null,mockGivenBookRepository,null,null);
+        GivingService givingService = new GivingService(null,null,mockGivenBookRepository,null,null, null);
 
         assertFalse(()->givingService.canGiveBook(null));
 
@@ -96,7 +96,11 @@ class GivingServiceTest {
 
         OrderRepository spyOrderRepository = spy(OrderRepository.class);
 
-        GivingService givingService = new GivingService(mockBookRepository,mockUserRepository,givenBookRepository,spyOrderRepository,null);
+        Metrics spyMetrics = spy(new Metrics(null,null,null,null,null));
+        doNothing().when(spyMetrics).refreshGivenBooksCounter();
+        doNothing().when(spyMetrics).refreshOrderCounter();
+
+        GivingService givingService = new GivingService(mockBookRepository,mockUserRepository,givenBookRepository,spyOrderRepository,null, spyMetrics);
         GivenBook givenBook = givingService.giveBook(1L,1L, 1L ,false, testReturnLocalDateTime);
 
         verify(spyOrderRepository,times(1)).deleteById(1L);
@@ -105,6 +109,8 @@ class GivingServiceTest {
         assertEquals(false,givenBook.isInReadingRoom());
         assertEquals(testGivenLocalDateTime,givenBook.getGivenDate());
         assertEquals(testReturnLocalDateTime,givenBook.getReturnDate());
+        verify(spyMetrics,times(1)).refreshGivenBooksCounter();
+        verify(spyMetrics,times(1)).refreshOrderCounter();
 
     }
 
@@ -129,23 +135,26 @@ class GivingServiceTest {
         OrderRepository spyOrderRepository = spy(OrderRepository.class);
 
         Metrics spyMetrics = spy(new Metrics(null,null,null,null,null));
+        doNothing().when(spyMetrics).refreshGivenBooksCounter();
 
         RatingRepository mockRatingRepository = mock(RatingRepository.class);
         BookService spyBookService = spy(new BookService(mockBookRepository,spyMetrics));
         RatingService spyRatingService = spy(new RatingService(mockRatingRepository,spyBookService));
 
-        GivingService givingService = new GivingService(mockBookRepository,mockUserRepository,spyGivenBookRepository,spyOrderRepository,spyRatingService);
+        GivingService givingService = new GivingService(mockBookRepository,mockUserRepository,spyGivenBookRepository,spyOrderRepository,spyRatingService, spyMetrics);
 
         assertThrows(IllegalArgumentException.class,()->givingService.returnBook(2L));
+        verify(spyMetrics,times(0)).refreshGivenBooksCounter();
 
         givingService.returnBook(1L);
         verify(spyGivenBookRepository,times(1)).deleteById(1L);
         verify(spyRatingService,times(1)).createRatingRequest(testUser,testBook);
+        verify(spyMetrics,times(1)).refreshGivenBooksCounter();
     }
 
     @Test
     void returnDate() {
-        GivingService givingService = new GivingService(null,null,null,null,null);
+        GivingService givingService = new GivingService(null,null,null,null,null, null);
 
         assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().minusDays(1)));
 
