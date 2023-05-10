@@ -2,6 +2,7 @@ package com.benzol45.library.service;
 
 import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class BookService {
 
     public Book getById(Long id) {
         log.debug("Can't find book with given id" + id);
-        return bookRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Can't find book with id " + id));
+        return bookRepository.findById(id).orElseThrow(()->new ObjectNotFoundException("Can't find book with id " + id));
     }
 
     public Optional<Book> getByISBN(String isbn) {
@@ -77,7 +78,7 @@ public class BookService {
             bytes = Files.readAllBytes(coverImage);
         } catch (IOException e) {
             log.warn("Can't read cover image file " + coverImage.toAbsolutePath() + " for book with id " + book.getId());
-            throw new IllegalStateException(e);
+            throw new ObjectNotFoundException(e);
         }
         String base64String = Base64.getEncoder().encodeToString(bytes);
         return base64String;

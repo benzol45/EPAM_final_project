@@ -1,5 +1,6 @@
 package com.benzol45.library.controller;
 
+import com.benzol45.library.exception.IncorrectDataFromClientException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,7 @@ public class PageableParam {
 
         if (!correctSorting(this.sort)) {
             log.debug("Incorrect sorting " + sort);
-            //throw new IllegalStateException("Incorrect sorting " + sort);
+            //throw new IncorrectDataFromClientException("Incorrect sorting " + sort);
             sort ="title";
         }
 

@@ -4,6 +4,8 @@ import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.Rating;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.exception.IncorrectDataFromClientException;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.BookRepository;
 import com.benzol45.library.repository.RatingRepository;
 import org.junit.jupiter.api.Test;
@@ -35,13 +37,13 @@ class RatingServiceTest {
         when(spyRatingRepository.countRateByBook(book)).thenReturn(2);
 
         RatingService ratingService = new RatingService(spyRatingRepository,spyBookService);
-        assertThrows(IllegalArgumentException.class,()->ratingService.setRating(user,2L,5));
-        assertThrows(IllegalArgumentException.class,()->ratingService.setRating(user,1L,11));
-        assertThrows(IllegalArgumentException.class,()->ratingService.setRating(user,1L,-1));
+        assertThrows(IncorrectDataFromClientException.class,()->ratingService.setRating(user,2L,5));
+        assertThrows(IncorrectDataFromClientException.class,()->ratingService.setRating(user,1L,11));
+        assertThrows(IncorrectDataFromClientException.class,()->ratingService.setRating(user,1L,-1));
 
-        assertThrows(IllegalArgumentException.class,()->ratingService.setRating(finishedRatingUser,1L,5));
-        assertThrows(IllegalArgumentException.class,()->ratingService.setRating(finishedRatingUser,2L,5));
-        assertThrows(IllegalArgumentException.class,()->ratingService.setRating(user,3L,5));
+        assertThrows(IncorrectDataFromClientException.class,()->ratingService.setRating(finishedRatingUser,1L,5));
+        assertThrows(IncorrectDataFromClientException.class,()->ratingService.setRating(finishedRatingUser,2L,5));
+        assertThrows(ObjectNotFoundException.class,()->ratingService.setRating(user,3L,5));
 
         ratingService.setRating(user,1L,5);
         verify(spyBookService,times(1)).setRatingForBook(any(),eq(2.0));

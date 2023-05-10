@@ -5,6 +5,8 @@ import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.Order;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.exception.IncorrectDataFromClientException;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.*;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +28,7 @@ class GivingServiceTest {
 
         GivingService givingService = new GivingService(null,null,givenBookRepository,null,null, null);
         assertEquals(testGivenBook, givingService.getById(1L));
-        assertThrows(IllegalArgumentException.class, ()->givingService.getById(2L));
+        assertThrows(ObjectNotFoundException.class, ()->givingService.getById(2L));
     }
 
     @Test
@@ -143,7 +145,7 @@ class GivingServiceTest {
 
         GivingService givingService = new GivingService(mockBookRepository,mockUserRepository,spyGivenBookRepository,spyOrderRepository,spyRatingService, spyMetrics);
 
-        assertThrows(IllegalArgumentException.class,()->givingService.returnBook(2L));
+        assertThrows(ObjectNotFoundException.class,()->givingService.returnBook(2L));
         verify(spyMetrics,times(0)).refreshGivenBooksCounter();
 
         givingService.returnBook(1L);
@@ -156,18 +158,18 @@ class GivingServiceTest {
     void returnDate() {
         GivingService givingService = new GivingService(null,null,null,null,null, null);
 
-        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().minusDays(1)));
+        assertThrows(IncorrectDataFromClientException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().minusDays(1)));
 
         givingService.checkReturnDate(true,LocalDateTime.now());
         givingService.checkReturnDate(true,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59));
-        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).plusSeconds(2)));
-        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().plusYears(2)));
+        assertThrows(IncorrectDataFromClientException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).plusSeconds(2)));
+        assertThrows(IncorrectDataFromClientException.class, ()->givingService.checkReturnDate(true,LocalDateTime.now().plusYears(2)));
 
         givingService.checkReturnDate(false,LocalDateTime.now());
         givingService.checkReturnDate(false,LocalDateTime.now().withHour(23).withMinute(59).withSecond(59));
         givingService.checkReturnDate(false,LocalDateTime.now().plusDays(25));
-        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(false,LocalDateTime.now().plusDays(35)));
-        assertThrows(IllegalArgumentException.class, ()->givingService.checkReturnDate(false,LocalDateTime.now().plusYears(2)));
+        assertThrows(IncorrectDataFromClientException.class, ()->givingService.checkReturnDate(false,LocalDateTime.now().plusDays(35)));
+        assertThrows(IncorrectDataFromClientException.class, ()->givingService.checkReturnDate(false,LocalDateTime.now().plusYears(2)));
 
 
     }

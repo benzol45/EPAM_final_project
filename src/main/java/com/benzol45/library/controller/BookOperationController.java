@@ -2,6 +2,7 @@ package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.exception.IncorrectDataFromClientException;
 import com.benzol45.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -81,7 +82,7 @@ public class BookOperationController {
                 return "redirect:/catalog";
             }
         } else {
-            throw new IllegalStateException("Can't give book. Don't have free copies");
+            throw new IncorrectDataFromClientException("Can't give book. Don't have free copies");
         }
     }
 

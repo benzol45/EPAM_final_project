@@ -3,6 +3,8 @@ package com.benzol45.library.service;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.Rating;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.exception.IncorrectDataFromClientException;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,18 +48,18 @@ public class RatingService {
     public void setRating(User user, Long ratingRequestId, int rate) {
         if (rate<0 || rate>10) {
             log.debug("Incorrect rate value " + rate + " from user " + user.getLogin());
-            throw new IllegalArgumentException("Incorrect rate");
+            throw new IncorrectDataFromClientException("Incorrect rate");
         }
 
         Rating ratingRequest = ratingRepository.findById(ratingRequestId)
-                .orElseThrow(()->new IllegalArgumentException("Incorrect rating request"));
+                .orElseThrow(()->new ObjectNotFoundException("Incorrect rating request"));
         if (!ratingRequest.getUser().equals(user)) {
             log.warn("Rating request for another reader. From " + user.getLogin() + ", request for user" + ratingRequest.getUser().getLogin());
-            throw new IllegalArgumentException("Rating request for another reader");
+            throw new IncorrectDataFromClientException("Rating request for another reader");
         }
         if (ratingRequest.getRate()!=null) {
             log.debug("Rating request already processed, id " + ratingRequestId);
-            throw new IllegalArgumentException("Rating request already processed");
+            throw new IncorrectDataFromClientException("Rating request already processed");
         }
 
         ratingRequest.setRate(rate);
@@ -71,7 +73,7 @@ public class RatingService {
     public double getAverageRatingByBook(Book book) {
         if (book==null) {
             log.debug("Request rating for null book");
-            throw new IllegalArgumentException("Incorrect book");
+            throw new ObjectNotFoundException("Incorrect book");
         }
 
         Double rating = ratingRepository.sumRateByBook(book).doubleValue() / ratingRepository.countRateByBook(book);

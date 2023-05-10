@@ -1,6 +1,7 @@
 package com.benzol45.library.service;
 
 import com.benzol45.library.entity.Book;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.BookRepository;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,6 @@ class BookServiceTest {
         assertEquals(Base64.getEncoder().encodeToString(bytes), bookService.getBase64Cover(book));
 
         Book bookWithIncorrectPath = Book.builder().imagePath("incorrect").build();
-        assertThrows(IllegalStateException.class, () -> bookService.getBase64Cover(bookWithIncorrectPath));
+        assertThrows(ObjectNotFoundException.class, () -> bookService.getBase64Cover(bookWithIncorrectPath));
     }
 }

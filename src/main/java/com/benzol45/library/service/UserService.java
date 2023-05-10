@@ -2,6 +2,7 @@ package com.benzol45.library.service;
 
 import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class UserService {
     }
 
     public User getById(Long readerId) {
-        return userRepository.findById(readerId).orElseThrow(() -> new IllegalArgumentException("Can't find user with id " + readerId));
+        return userRepository.findById(readerId).orElseThrow(() -> new ObjectNotFoundException("Can't find user with id " + readerId));
     }
 
     public User saveNewUser(User user) {

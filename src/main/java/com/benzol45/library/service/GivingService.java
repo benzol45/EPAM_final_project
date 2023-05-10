@@ -4,6 +4,8 @@ import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.User;
+import com.benzol45.library.exception.IncorrectDataFromClientException;
+import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.BookRepository;
 import com.benzol45.library.repository.GivenBookRepository;
 import com.benzol45.library.repository.OrderRepository;
@@ -61,7 +63,7 @@ public class GivingService {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {
             log.debug("Can't find the given book by id " + givenBookId);
-            throw new IllegalArgumentException("Can't find the given book by id " + givenBookId);
+            throw new ObjectNotFoundException("Can't find the given book by id " + givenBookId);
         }
 
         return optionalGivenBook.get();
@@ -99,7 +101,7 @@ public class GivingService {
     public GivenBook giveBook(Long bookId, Long readerId, Long orderId, Boolean toReadingRoom, LocalDateTime returnDate) {
         if (!canGiveBookById(bookId)) {
             log.debug("Can't give the book with id " + bookId + ", don't have free copy");
-            throw new IllegalStateException("Can't give the book, don't have free copy");
+            throw new IncorrectDataFromClientException("Can't give the book, don't have free copy");
         }
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
@@ -111,7 +113,7 @@ public class GivingService {
             if (optionalBook.isEmpty()) {
                 log.debug("Can't find book by id " + bookId);
             }
-            throw new IllegalArgumentException("Can't find book or reader");
+            throw new ObjectNotFoundException("Can't find book or reader");
         }
 
 
@@ -147,7 +149,7 @@ public class GivingService {
         Optional<GivenBook> optionalGivenBook = givenBookRepository.findById(givenBookId);
         if (optionalGivenBook.isEmpty()) {
             log.debug("Can't find the given book by id " + givenBookId);
-            throw new IllegalArgumentException("Incorrect given book index " + givenBookId);
+            throw new ObjectNotFoundException("Incorrect given book index " + givenBookId);
         }
         GivenBook givenBook = optionalGivenBook.get();
         ratingService.createRatingRequest(givenBook.getUser(),givenBook.getBook());
@@ -161,18 +163,18 @@ public class GivingService {
 
     public void checkReturnDate(Boolean toReadingRoom, LocalDateTime returnDate) {
         if (returnDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Return date&time incorrect. Can't be before now.");
+            throw new IncorrectDataFromClientException("Return date&time incorrect. Can't be before now.");
         }
 
         if (toReadingRoom) {
             //return only this day
             if (!LocalDate.now().isEqual(returnDate.toLocalDate())) {
-                throw new IllegalArgumentException("Books in reading room must be returned this day");
+                throw new IncorrectDataFromClientException("Books in reading room must be returned this day");
             }
         } else {
             //returning not more than 1 month
             if (ChronoUnit.MONTHS.between(LocalDate.now(),returnDate)>=1) {
-                throw new IllegalArgumentException("Books can give on a subscription not more than 1 month");
+                throw new IncorrectDataFromClientException("Books can give on a subscription not more than 1 month");
             }
         }
     }
