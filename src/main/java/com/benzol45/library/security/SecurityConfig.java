@@ -30,7 +30,7 @@ public class SecurityConfig {
         return http.authorizeHttpRequests()
                     .requestMatchers("/", "/catalog", "/book/*/info", "/user/new", "/access_denied", "/actuator/health").permitAll()
                     .requestMatchers("/account/reader", "/book_order/*", "/book_rate/*", "/order_cancel/*").hasRole("READER")
-                    .requestMatchers("/account/librarian", "/reader/**", "/book_give/**", "/book_return/*", "/book_return_with_fine/*").hasRole("LIBRARIAN")
+                    .requestMatchers("/account/librarian", "/reader/**", "/book_give/**", "/book_return/*", "/book_return_with_fine/*", "/api/indicators").hasRole("LIBRARIAN")
                     .requestMatchers("/user/**", "/book/**", "/isbn/**", "/actuator/**").hasRole("ADMINISTRATOR")
                     .anyRequest().denyAll().and()
                 .exceptionHandling()

@@ -10,7 +10,6 @@ public class LibraryApplication {
         SpringApplication.run(LibraryApplication.class, args);
     }
 
-    //TODO Код возврата для исключений - коды ошибок
     //TODO Бизнес-метрики убрать из метрик и перенести в REST сервис
     //TODO Придумать техническую метрику
 
