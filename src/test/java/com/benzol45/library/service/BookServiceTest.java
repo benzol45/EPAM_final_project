@@ -32,4 +32,11 @@ class BookServiceTest {
         Book bookWithIncorrectPath = Book.builder().imagePath("incorrect").build();
         assertThrows(ObjectNotFoundException.class, () -> bookService.getBase64Cover(bookWithIncorrectPath));
     }
+
+    @Test
+    void setExternalFileAsCoverImage() {
+        BookService bookService = new BookService(null);
+        assertThrows(IllegalStateException.class,()->bookService.setExternalFileAsCoverImage(new Book(),"incorrectURL"));
+
+    }
 }

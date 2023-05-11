@@ -30,6 +30,7 @@ class UserServiceTest {
         testUser.setFullName("full name");
         testUser.setLogin("login");
         testUser.setPassword("password");
+        testUser.setRole(User.Role.READER);
 
         spyUserRepository = spy(UserRepository.class);
         when(spyUserRepository.findById(1L)).thenReturn(Optional.of(testUser));
@@ -38,6 +39,15 @@ class UserServiceTest {
 
         userService = new UserService(spyUserRepository, NoOpPasswordEncoder.getInstance());
 
+    }
+
+    @Test
+    void getSecurityFielads() {
+        assertEquals("login",testUser.getUsername());
+        assertEquals(true,testUser.isAccountNonExpired());
+        assertEquals(true,testUser.isAccountNonLocked());
+        assertEquals(true,testUser.isAccountNonExpired());
+        assertEquals(true,testUser.isEnabled());
     }
 
     @Test
