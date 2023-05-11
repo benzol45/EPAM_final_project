@@ -23,13 +23,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Metrics metrics;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, Metrics metrics) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.metrics = metrics;
     }
 
     public User getById(Long readerId) {
@@ -72,7 +70,6 @@ public class UserService {
             User user = current.get();
             user.setRole(role);
             user = userRepository.save(user);
-            metrics.refreshReaderCounter();
             return user;
         } else {
             return null;
@@ -82,7 +79,6 @@ public class UserService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
-        metrics.refreshReaderCounter();
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -92,7 +88,6 @@ public class UserService {
             User user = current.get();
             user.setBlocked(false);
             user = userRepository.save(user);
-            metrics.refreshReaderCounter();
             return user;
         } else {
             return null;
@@ -106,7 +101,6 @@ public class UserService {
             User user = current.get();
             user.setBlocked(true);
             user = userRepository.save(user);
-            metrics.refreshReaderCounter();
             return user;
         } else {
             return null;

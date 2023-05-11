@@ -42,11 +42,7 @@ class OrderServiceTest {
         when(spyOrderRepository.findByBookAndUser(testBook,userHasOrder)).thenReturn(Optional.of(testOrder));
         when(spyOrderRepository.findByBookAndUser(testBook,userHasNotOrder)).thenReturn(Optional.empty());
 
-        spyMetrics = spy(new Metrics(null,null,null,null,null));
-        doNothing().when(spyMetrics).refreshOrderCounter();
-
-
-        orderService = new OrderService(spyOrderRepository,mockBookRepository,mockUserRepository,spyMetrics);
+        orderService = new OrderService(spyOrderRepository,mockBookRepository,mockUserRepository);
     }
 
     @Test
@@ -57,31 +53,26 @@ class OrderServiceTest {
         returnedOrder = orderService.orderBook(2L,2L);
         assertNull(returnedOrder);
         verify(spyOrderRepository,times(0)).save(any());
-        verify(spyMetrics,times(0)).refreshOrderCounter();
 
         //Empty reader
         returnedOrder = orderService.orderBook(1L,3L);
         assertNull(returnedOrder);
         verify(spyOrderRepository,times(0)).save(any());
-        verify(spyMetrics,times(0)).refreshOrderCounter();
 
         //Reader already has order with this book
         returnedOrder = orderService.orderBook(1L,1L);
         assertNull(returnedOrder);
         verify(spyOrderRepository,times(0)).save(any());
-        verify(spyMetrics,times(0)).refreshOrderCounter();
 
         //all correct, order created and saved
         returnedOrder = orderService.orderBook(1L,2L);
         assertNotNull(returnedOrder);
         verify(spyOrderRepository,times(1)).save(any());
-        verify(spyMetrics,times(1)).refreshOrderCounter();
     }
 
     @Test
     void deleteOrder() {
         orderService.deleteOrder(1L);
         verify(spyOrderRepository,times(1)).deleteById(1L);
-        verify(spyMetrics,times(1)).refreshOrderCounter();
     }
 }

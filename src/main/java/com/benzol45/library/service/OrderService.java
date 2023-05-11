@@ -27,14 +27,12 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-    private final Metrics metrics;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, BookRepository bookRepository, UserRepository userRepository, Metrics metrics) {
+    public OrderService(OrderRepository orderRepository, BookRepository bookRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
-        this.metrics = metrics;
     }
 
     @PreAuthorize("hasRole('LIBRARIAN')")
@@ -53,7 +51,6 @@ public class OrderService {
     @PreAuthorize("hasRole('READER')")
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
-        metrics.refreshOrderCounter();
     }
 
     @PreAuthorize("hasAnyRole('READER','LIBRARIAN')")
@@ -84,7 +81,6 @@ public class OrderService {
                                 .build();
 
         orderRepository.save(newOrder);
-        metrics.refreshOrderCounter();
         return newOrder;
     }
 }

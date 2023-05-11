@@ -30,12 +30,10 @@ import java.util.UUID;
 @Slf4j
 public class BookService {
     private final BookRepository bookRepository;
-    private final Metrics metrics;
 
     @Autowired
-    public BookService(BookRepository bookRepository, Metrics metrics) {
+    public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.metrics = metrics;
     }
 
     public List<Book> getAll() {
@@ -87,14 +85,12 @@ public class BookService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Book save(Book book) {
         bookRepository.save(book);
-        metrics.refreshBookCopyCounter();
         return book;
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
-        metrics.refreshBookCopyCounter();
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")

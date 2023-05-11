@@ -36,16 +36,14 @@ public class GivingService {
     private final GivenBookRepository givenBookRepository;
     private final OrderRepository orderRepository;
     private final RatingService ratingService;
-    private final Metrics metrics;
 
     @Autowired
-    public GivingService(BookRepository bookRepository, UserRepository userRepository, GivenBookRepository givenBookRepository, OrderRepository orderRepository, RatingService ratingService, Metrics metrics) {
+    public GivingService(BookRepository bookRepository, UserRepository userRepository, GivenBookRepository givenBookRepository, OrderRepository orderRepository, RatingService ratingService) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
         this.givenBookRepository = givenBookRepository;
         this.orderRepository = orderRepository;
         this.ratingService = ratingService;
-        this.metrics = metrics;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -128,10 +126,7 @@ public class GivingService {
 
         if (orderId!=null) {
             orderRepository.deleteById(orderId);
-            metrics.refreshOrderCounter();
         }
-
-        metrics.refreshGivenBooksCounter();
 
         return givenBook;
     }
@@ -142,7 +137,6 @@ public class GivingService {
         createRatingRequest(givenBookId);
 
         givenBookRepository.deleteById(givenBookId);
-        metrics.refreshGivenBooksCounter();
     }
 
     private void createRatingRequest(Long givenBookId) {

@@ -10,9 +10,6 @@ public class LibraryApplication {
         SpringApplication.run(LibraryApplication.class, args);
     }
 
-    //TODO Бизнес-метрики убрать из метрик и перенести в REST сервис
-    //TODO Придумать техническую метрику
-
     //Выписать в презентацию "интересные фишки"
     //Пройтись по полезностям и выписать ссылки на примеры
 

@@ -20,7 +20,7 @@ class BookServiceTest {
 
     @Test
     void getBase64Cover() throws IOException {
-        BookService bookService = new BookService(null,null);
+        BookService bookService = new BookService(null);
 
         String tempFolder = org.assertj.core.util.Files.temporaryFolderPath();
         String filename = tempFolder + UUID.randomUUID() + ".jpg";

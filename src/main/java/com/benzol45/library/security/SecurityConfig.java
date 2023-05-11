@@ -1,5 +1,7 @@
 package com.benzol45.library.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -8,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -23,6 +27,13 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    //This bean is very important. Without it ApplicationListener<SessionDestroyedEvent> doesn't call
+    //https://stackoverflow.com/questions/52838124/applicationlistenersessiondestroyedevent-is-not-called
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
     }
 
     @Bean

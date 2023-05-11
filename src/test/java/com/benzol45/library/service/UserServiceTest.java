@@ -35,10 +35,8 @@ class UserServiceTest {
         when(spyUserRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(spyUserRepository.findById(2L)).thenReturn(Optional.empty());
         when(spyUserRepository.save(any())).thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0));
-        spyMetrics = spy(new Metrics(null,null,null,null,null));
-        doNothing().when(spyMetrics).refreshReaderCounter();
 
-        userService = new UserService(spyUserRepository, NoOpPasswordEncoder.getInstance(), spyMetrics);
+        userService = new UserService(spyUserRepository, NoOpPasswordEncoder.getInstance());
 
     }
 
@@ -47,20 +45,17 @@ class UserServiceTest {
         User user = userService.saveNewUser(testUser);
 
         verify(spyUserRepository,times(1)).save(testUser);
-        verify(spyMetrics,times(0)).refreshReaderCounter();
     }
 
     @Test
     void setUserRole() {
         User user = userService.setUserRole(2L, User.Role.READER);
         verify(spyUserRepository,times(0)).save(any());
-        verify(spyMetrics,times(0)).refreshReaderCounter();
         assertEquals(null, user);
 
         user = userService.setUserRole(1L, User.Role.READER);
         verify(spyUserRepository,times(1)).findById(1L);
         verify(spyUserRepository,times(1)).save(any());
-        verify(spyMetrics,times(1)).refreshReaderCounter();
         testUser.setRole(User.Role.READER);
         assertEquals(testUser, user);
     }
@@ -71,12 +66,10 @@ class UserServiceTest {
 
         User user = userService.unblock(2L);
         verify(spyUserRepository,times(0)).save(any());
-        verify(spyMetrics,times(0)).refreshReaderCounter();
         assertEquals(null, user);
 
         user = userService.unblock(1L);
         verify(spyUserRepository,times(1)).save(any());
-        verify(spyMetrics,times(1)).refreshReaderCounter();
         testUser.setBlocked(false);
         assertEquals(testUser, user);
         assertFalse(user.isBlocked());
@@ -88,12 +81,10 @@ class UserServiceTest {
 
         User user = userService.block(2L);
         verify(spyUserRepository,times(0)).save(any());
-        verify(spyMetrics,times(0)).refreshReaderCounter();
         assertEquals(null, user);
 
         user = userService.block(1L);
         verify(spyUserRepository,times(1)).save(any());
-        verify(spyMetrics,times(1)).refreshReaderCounter();
         testUser.setBlocked(true);
         assertEquals(testUser, user);
         assertTrue(user.isBlocked());

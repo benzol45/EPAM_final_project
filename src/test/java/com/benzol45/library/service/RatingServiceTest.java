@@ -26,8 +26,7 @@ class RatingServiceTest {
         Rating finishedRating = Rating.builder().book(book).user(finishedRatingUser).rate(5).build();
 
         BookRepository mockBookRepository = mock(BookRepository.class);
-        Metrics spyMetrics = spy(new Metrics(null,null,null,null,null));
-        BookService spyBookService = spy(new BookService(mockBookRepository,spyMetrics));
+        BookService spyBookService = spy(new BookService(mockBookRepository));
 
         RatingRepository spyRatingRepository = spy(RatingRepository.class);
         when(spyRatingRepository.findById(1L)).thenReturn(Optional.of(rating));
