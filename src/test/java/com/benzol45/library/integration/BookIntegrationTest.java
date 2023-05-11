@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -99,6 +100,11 @@ public class BookIntegrationTest {
         assertEquals(2,bookRepository.findAll().size());
 
         //edit first
+        mockMvc.perform(get("/book/1/edit").with(SecurityMockMvcRequestPostProcessors.csrf()))
+                //.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(Matchers.containsString("<form method=\"post\" action=\"/book/save\"")));
+
         MockMultipartFile emptyFileMPart = new MockMultipartFile("uploadCoverImage", "cover.jpg", "MediaType.IMAGE_JPEG", new byte[0]);
         mockMvc.perform(multipart("/book/save")
                         .file(notEmptyFilePart)
