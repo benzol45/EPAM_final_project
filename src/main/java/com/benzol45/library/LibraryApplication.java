@@ -10,8 +10,6 @@ public class LibraryApplication {
         SpringApplication.run(LibraryApplication.class, args);
     }
 
-    //TODO пройти по контроллерам.только руление запростов, без бизнес-логики
-
     //Выписать в презентацию "интересные фишки"
     //Пройтись по полезностям и выписать ссылки на примеры
 

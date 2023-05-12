@@ -74,15 +74,11 @@ public class BookOperationController {
 
         givingService.checkReturnDate(toReadingRoom, returnDate);
 
-        if (givingService.canGiveBookById(bookId)) {
-            givingService.giveBook(bookId, readerId, orderId, toReadingRoom, returnDate);
-            if (orderId!=null) {
-                return "redirect:/account/librarian";
-            } else {
-                return "redirect:/catalog";
-            }
+        givingService.giveBook(bookId, readerId, orderId, toReadingRoom, returnDate);
+        if (orderId != null) {
+            return "redirect:/account/librarian";
         } else {
-            throw new IncorrectDataFromClientException("Can't give book. Don't have free copies");
+            return "redirect:/catalog";
         }
     }
 
