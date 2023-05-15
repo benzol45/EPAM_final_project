@@ -2,10 +2,12 @@ package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.GivenBook;
+import com.benzol45.library.entity.Order;
 import com.benzol45.library.entity.User;
 import com.benzol45.library.entity.validator.BookUniqValidator;
 import com.benzol45.library.service.BookService;
 import com.benzol45.library.service.GivingService;
+import com.benzol45.library.service.OrderService;
 import com.benzol45.library.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,15 @@ public class BookController {
     private final BookService bookService;
     private final BookUniqValidator bookUniqValidator;
     private final UserService userService;
+    private final OrderService orderService;
     private final GivingService givingService;
 
     @Autowired
-    public BookController(BookService bookService, BookUniqValidator bookUniqValidator, UserService userService, GivingService givingService) {
+    public BookController(BookService bookService, BookUniqValidator bookUniqValidator, UserService userService, OrderService orderService, GivingService givingService) {
         this.bookService = bookService;
         this.bookUniqValidator = bookUniqValidator;
         this.userService = userService;
+        this.orderService = orderService;
         this.givingService = givingService;
     }
 
@@ -52,6 +56,11 @@ public class BookController {
             List<GivenBook> givenBooks = givingService.getAllByBook(book);
             if (!givenBooks.isEmpty()) {
                 model.addAttribute("given_books", givenBooks);
+            }
+
+            List<Order> orders = orderService.getAllByBook(book);
+            if (!orders.isEmpty()) {
+                model.addAttribute("orders", orders);
             }
         }
 

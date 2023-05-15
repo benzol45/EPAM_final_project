@@ -45,10 +45,28 @@
     </div>
     <br>
 
+    <div th:if="${orders}">
+        <br>
+        <table>
+            <caption style="font-weight: bold" th:text="#{book.table.order_title}">Orders</caption>
+            <tr>
+                <th th:text="#{book.table.reader}">Reader</th>
+                <th th:text="#{book.table.creatingDate}">Creating date</th>
+            </tr>
+            <tr th:each="order: ${orders}">
+                <td><a th:href="@{/reader/{id} (id=${order.getUser().getId()})}" th:text="${order.getUser().getFullName()}">reader</a></td>
+                <td th:text="${order.getCreateDate().format(dateFormatter)}">Creating date</td>
+            </tr>
+        </table>
+        <br>
+        <br>
+    </div>
+
 
     <div th:if="${given_books}">
         <br>
         <table>
+            <caption style="font-weight: bold" th:text="#{book.table.given_title}">Given to readers</caption>
             <tr>
                 <th th:text="#{book.table.reader}">Reader</th>
                 <th th:text="#{book.table.givenDate}">Given date</th>

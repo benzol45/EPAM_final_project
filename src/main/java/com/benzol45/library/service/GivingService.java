@@ -88,8 +88,9 @@ public class GivingService {
             return false;
         }
         int copiesInLibrary = book.getQuantity();
+        int copiesInOrder = orderRepository.countAllByBook(book);
         int copiesInUse = givenBookRepository.countAllByBook(book);
-        int copiesFree = copiesInLibrary - copiesInUse;
+        int copiesFree = copiesInLibrary - copiesInOrder - copiesInUse;
 
         return (copiesFree>0);
     }

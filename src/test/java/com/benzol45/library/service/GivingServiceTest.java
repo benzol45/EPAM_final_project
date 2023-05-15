@@ -35,24 +35,41 @@ class GivingServiceTest {
     void canGiveBookById() {
         Book testBook = Book.builder().id(1L).quantity(3).build();
 
+        OrderRepository mockOrderRepository = mock(OrderRepository.class);
         GivenBookRepository mockGivenBookRepository = mock(GivenBookRepository.class);
         BookRepository mockBookRepository = mock(BookRepository.class);
         when(mockBookRepository.findById(1L)).thenReturn(Optional.of(testBook));
         when(mockBookRepository.findById(2L)).thenReturn(Optional.empty());
-        GivingService givingService = new GivingService(mockBookRepository,null,mockGivenBookRepository,null,null);
+        GivingService givingService = new GivingService(mockBookRepository,null,mockGivenBookRepository,mockOrderRepository,null);
 
         assertFalse(()->givingService.canGiveBookById(2L));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(0);
         assertTrue(()->givingService.canGiveBookById(1L));
 
-        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(2);
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(1);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(1);
         assertTrue(()->givingService.canGiveBookById(1L));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(2);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(2);
+        assertFalse(()->givingService.canGiveBookById(1L));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(3);
         assertFalse(()->givingService.canGiveBookById(1L));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(4);
+        assertFalse(()->givingService.canGiveBookById(1L));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(3);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(0);
+        assertFalse(()->givingService.canGiveBookById(1L));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(4);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(0);
         assertFalse(()->givingService.canGiveBookById(1L));
     }
 
@@ -60,21 +77,42 @@ class GivingServiceTest {
     void canGiveBook() {
         Book testBook = Book.builder().id(1L).quantity(3).build();
 
+        OrderRepository mockOrderRepository = mock(OrderRepository.class);
         GivenBookRepository mockGivenBookRepository = mock(GivenBookRepository.class);
-        GivingService givingService = new GivingService(null,null,mockGivenBookRepository,null,null);
+        GivingService givingService = new GivingService(null,null,mockGivenBookRepository,mockOrderRepository,null);
 
         assertFalse(()->givingService.canGiveBook(null));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(0);
         assertTrue(()->givingService.canGiveBook(testBook));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(2);
         assertTrue(()->givingService.canGiveBook(testBook));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(1);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(1);
+        assertTrue(()->givingService.canGiveBook(testBook));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(3);
         assertFalse(()->givingService.canGiveBook(testBook));
 
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(0);
         when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(4);
+        assertFalse(()->givingService.canGiveBook(testBook));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(2);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(1);
+        assertFalse(()->givingService.canGiveBook(testBook));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(3);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(0);
+        assertFalse(()->givingService.canGiveBook(testBook));
+
+        when(mockOrderRepository.countAllByBook(testBook)).thenReturn(4);
+        when(mockGivenBookRepository.countAllByBook(testBook)).thenReturn(0);
         assertFalse(()->givingService.canGiveBook(testBook));
     }
 

@@ -44,6 +44,11 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId, Sort.by("createDate"));
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    public List<Order> getAllByBook(Book book) {
+        return orderRepository.findAllByBook(book, Sort.by("createDate"));
+    }
+
     public boolean isOwner(Long orderId, User userDetails) {
         return orderRepository.findById(orderId).get().getUser().equals(userDetails);
     }
