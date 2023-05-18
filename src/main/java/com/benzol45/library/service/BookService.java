@@ -62,7 +62,7 @@ public class BookService {
     }
 
     public Optional<Book> getByISBN(String isbn) {
-        return bookRepository.findByISBN(isbn).stream().findFirst();
+        return bookRepository.findByISBN(isbn);
     }
 
     public String getBase64Cover(Book book) {

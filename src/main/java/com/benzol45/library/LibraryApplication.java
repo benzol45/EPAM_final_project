@@ -10,6 +10,9 @@ public class LibraryApplication {
         SpringApplication.run(LibraryApplication.class, args);
     }
 
+    //TODO Чистка импортов
+
+    //Какие подготовки были сделаны
     //Выписать в презентацию "интересные фишки"
     //Пройтись по полезностям и выписать ссылки на примеры
 

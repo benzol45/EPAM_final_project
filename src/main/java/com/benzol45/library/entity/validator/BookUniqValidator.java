@@ -32,7 +32,7 @@ public class BookUniqValidator  implements Validator {
             return;
         }
 
-        if (!bookRepository.findByISBN(((Book)target).getISBN()).isEmpty()) {
+        if (bookRepository.findByISBN(((Book)target).getISBN()).isPresent()) {
             errors.rejectValue("ISBN","NotUniq","ISBN must be uniq");
         }
     }
