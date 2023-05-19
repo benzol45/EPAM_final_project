@@ -1,6 +1,5 @@
 package com.benzol45.library.service;
 
-import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.exception.ObjectNotFoundException;
 import com.benzol45.library.repository.BookRepository;

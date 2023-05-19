@@ -1,6 +1,5 @@
 package com.benzol45.library.controller;
 
-import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.property.PropertyHolder;
 import com.benzol45.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

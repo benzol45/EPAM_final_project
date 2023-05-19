@@ -1,6 +1,5 @@
 package com.benzol45.library.controller;
 
-import com.benzol45.library.exception.IncorrectDataFromClientException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

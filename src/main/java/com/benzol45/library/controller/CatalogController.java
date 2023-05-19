@@ -1,12 +1,10 @@
 package com.benzol45.library.controller;
 
 import com.benzol45.library.entity.Book;
-import com.benzol45.library.entity.User;
 import com.benzol45.library.property.PropertyHolder;
 import com.benzol45.library.service.BookService;
 import com.benzol45.library.service.GivingService;
 import com.benzol45.library.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,6 +1,5 @@
 package com.benzol45.library.service;
 
-import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.GivenBook;
 import com.benzol45.library.entity.User;
@@ -22,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Contains methods for giving and returning books to/from readers and getting information about given books

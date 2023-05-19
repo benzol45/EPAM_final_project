@@ -1,6 +1,5 @@
 package com.benzol45.library.service;
 
-import com.benzol45.library.configuration.actuator.Metrics;
 import com.benzol45.library.entity.Book;
 import com.benzol45.library.entity.Order;
 import com.benzol45.library.entity.User;
